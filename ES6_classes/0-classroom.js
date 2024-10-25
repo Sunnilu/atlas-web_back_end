@@ -1,3 +1,5 @@
-// eslint-disable-next-line no-undef
-const myClassRoom = new ClassRoom(10);
-console.log(myClassRoom._maxStudentsSize); // output: 10
+export default class ClassRoom {
+  constructor(maxStudentsSize) {
+    this._maxStudentsSize = maxStudentsSize; // Assigning the attribute to _maxStudentsSize
+  }
+}
