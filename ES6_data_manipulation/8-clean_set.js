@@ -1,7 +1,7 @@
 // 8-clean_set.js
 export default function cleanSet(set, startString) {
   // Check if startString is empty and return an empty string if so
-  if (tyoeof startString !== 'string' || startString === '') {
+  if (typeof startString !== 'string' || startString === '') {
     return '';
   }
 
