@@ -31,9 +31,14 @@ export default class Car {
 }
 
 // Example usage
-const car1 = new Car('Toyota', 'V6', 'Red');
+const car1 = new Car('Nissan', 'Turbo', 'Pink');
 const car2 = car1.cloneCar();
 
 console.log(car1); // Original car
+console.log(car1 instanceof Car); // true
+
 console.log(car2); // Cloned car
-console.log(car1 === car2); // Should be false (different instances)
+console.log(car2 instanceof Car); // true
+
+// Check if the instances are the same
+console.log(car1 === car2); // false (different instances)
