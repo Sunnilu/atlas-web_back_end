@@ -9,36 +9,36 @@ export default class Car {
     this[colorSymbol] = color;
   }
 
-  // Getter for brand
-  get brand() {
+  // Method to clone the car
+  cloneCar() {
+    return new Car(this[brandSymbol], this[motorSymbol], this[colorSymbol]);
+  }
+
+  // Getter to access private attributes
+  get _brand() {
     return this[brandSymbol];
   }
 
-  // Getter for motor
-  get motor() {
+  get _motor() {
     return this[motorSymbol];
   }
 
-  // Getter for color
-  get color() {
+  get _color() {
     return this[colorSymbol];
-  }
-
-  // Method to clone the car
-  cloneCar() {
-    return new Car(this.brand, this.motor, this.color);
   }
 }
 
-// Example usage
-const car1 = new Car('Nissan', 'Turbo', 'Pink');
-const car2 = car1.cloneCar();
+// Example usage for testing
+const testCar = new Car('Nissan', 'Turbo', 'Pink');
+console.log(testCar); // Should show the car details
 
-console.log(car1); // Original car
-console.log(car1 instanceof Car); // true
+// Verify clone functionality
+const clonedCar = testCar.cloneCar();
+console.log(clonedCar); // Should show cloned car details
 
-console.log(car2); // Cloned car
-console.log(car2 instanceof Car); // true
+// Checking instance types
+console.log(testCar instanceof Car); // true
+console.log(clonedCar instanceof Car); // true
 
-// Check if the instances are the same
-console.log(car1 === car2); // false (different instances)
+// Verifying equality of instances
+console.log(testCar === clonedCar); // false (different instances)
