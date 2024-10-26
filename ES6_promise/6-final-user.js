@@ -1,9 +1,9 @@
-// eslint-disable-next-line import/extensions
+/* eslint-disable import/extensions */
+/* eslint-disable import/prefer-default-export */
+// 6-final-user.js
 import signUpUser from './4-user-promise.js';
-// eslint-disable-next-line import/extensions
 import uploadPhoto from './5-photo-reject.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export async function handleProfileSignup(firstName, lastName, fileName) {
   const results = await Promise.allSettled([
     signUpUser(firstName, lastName),
