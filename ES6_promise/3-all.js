@@ -1,13 +1,29 @@
+/* eslint-disable import/extensions */
+// 3-correct-text.test.js
+// eslint-disable-next-line import/no-unresolved
+import handleProfileSignup from './3-correct-text';
 import { uploadPhoto, createUser } from './utils';
 
-export default function handleProfileSignup() {
-  return Promise.all([uploadPhoto(), createUser()])
-    .then((responses) => {
-      // eslint-disable-next-line no-unused-vars
-      const [photoResponse, userResponse] = responses;
-      console.log(`${userResponse.body.firstName} ${userResponse.body.lastName}`);
-    })
-    .catch(() => {
-      console.log('Signup system offline');
+jest.mock('./utils');
+
+describe('handleProfileSignup', () => {
+  // eslint-disable-next-line jest/prefer-expect-assertions
+  it('returns the right text', async () => {
+    const spy = jest.spyOn(console, 'log').mockImplementation();
+
+    // Mock implementations
+    uploadPhoto.mockResolvedValue({ url: 'photo-profile-1' });
+    createUser.mockResolvedValue({
+      body: {
+        firstName: 'Guillaume',
+        lastName: 'Salva',
+      },
     });
-}
+
+    await handleProfileSignup();
+
+    // eslint-disable-next-line jest/no-alias-methods
+    expect(spy).toBeCalledWith('photo-profile-1 Guillaume Salva');
+    spy.mockRestore();
+  });
+});
