@@ -14,9 +14,9 @@ export default class Airport {
     return this._code;
   }
 
-  // String representation of the class
+  // Override toString to return the expected format
   toString() {
-    return this._code;
+    return `[object ${this._code}]`; // Updated to match expected output
   }
 
   // Validation methods
