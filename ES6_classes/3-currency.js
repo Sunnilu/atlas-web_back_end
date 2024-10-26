@@ -23,10 +23,8 @@ export default class Currency {
   }
 
   // Method to display full currency
-  // eslint-disable-next-line class-methods-use-this
   displayFullCurrency() {
-    // eslint-disable-next-line no-template-curly-in-string
-    return '${this._name} (${this._code})';
+    return `${this._name} (${this._code})`; // Ensure backticks are used here
   }
 
   // Validation methods
