@@ -1,0 +1,17 @@
+// 3-correct-text.test.js
+
+import { describe, it } from 'node:test';
+import handleProfileSignup from './3-all';
+
+describe('handleProfileSignup', () => {
+  it('returns the right text', async () => {
+    const spy = jest.spyOn(console, 'log').mockImplementation();
+    
+    await handleProfileSignup();
+
+    expect(spy).toBeCalledWith('First Name: Guillaume');
+    expect(spy).toBeCalledWith('Last Name: Salva');
+
+    spy.mockRestore();
+  });
+});
