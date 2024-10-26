@@ -1,10 +1,10 @@
 import { uploadPhoto, createUser } from './utils';
 
 export default function handleProfileSignup() {
-  Promise.all([uploadPhoto(), createUser()])
-    .then(() => {
-      // eslint-disable-next-line no-undef
-      const [] = responses;
+  return Promise.all([uploadPhoto(), createUser()])
+    .then((responses) => {
+      // eslint-disable-next-line no-undef, no-unused-vars
+      const [photoResponse, userResponse] = responses;
       // eslint-disable-next-line no-template-curly-in-string
       console.log('${userResponse.body.firstName} ${userResponse.body.lastName}');
     })
