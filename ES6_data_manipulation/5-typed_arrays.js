@@ -9,7 +9,17 @@ export default function createInt8TypedArray(length, position, value) {
   // Create a new ArrayBuffer and an Int8Array view
   const buffer = new ArrayBuffer(length);
   const int8Array = new Int8Array(buffer);
+
+  // Set the value aat the specified position
   int8Array[position] = value;
 
-  return int8Array;
+  // Return an object with a getInt8 method
+  return {
+    getInt8: (index) => {
+      if (index < 0 || index >= length) {
+        throw new Error('Index outside range');
+      }
+      return int8Array[index];
+    },
+  };
 }
