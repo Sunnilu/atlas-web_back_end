@@ -1,15 +1,21 @@
-// eslint-disable-next-line import/extensions
-import { uploadPhoto, createUser } from './utils.js';
+/* eslint-disable import/prefer-default-export */
+// 3-all.js
 
-// eslint-disable-next-line no-unused-vars
-function handleProfileSignup() {
-  Promise.all([uploadPhoto(), createUser()])
+import { uploadPhoto, createUser } from './utils';
+
+export function handleProfileSignup() {
+  const firstName = 'Bob';
+  const lastName = 'Dylan';
+
+  Promise.all([uploadPhoto(), createUser(firstName, lastName)])
     // eslint-disable-next-line no-unused-vars
-    .then(([photoResponse, userResponse]) => {
-      console.log(`First Name: ${userResponse.firstName}`);
-      console.log(`Last Name: ${userResponse.lastName}`);
+    .then(([photoData, userData]) => {
+      console.log(`firstName: ${userData.firstName}`);
+      console.log(`lastName: ${userData.lastName}`);
     })
-    .catch(() => {
-      console.log('Signup system offline');
+    // eslint-disable-next-line no-unused-vars
+    .catch((error) => {
+      // eslint-disable-next-line quotes
+      console.error("Signup system offline");
     });
 }
