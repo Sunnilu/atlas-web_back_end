@@ -5,7 +5,8 @@ export default function updateStudentGradeByCity(students, city, newGrades) {
     .filter((student) => student.location === city)
     .map((student) => {
       // Find the grade for the current student
-      const gradeObj = newGrades.find(() => (grade) => grade.studentId === student.id);
+      // eslint-disable-next-line arrow-parens
+      const gradeObj = newGrades.find(grade => grade.studentId === student.id);
       return {
         id: student.id,
         firstName: student.firstName,
