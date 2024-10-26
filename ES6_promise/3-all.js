@@ -1,11 +1,13 @@
-import { uploadPhoto, createUser } from './utils';
+// eslint-disable-next-line import/extensions
+import { uploadPhoto, createUser } from './utils.js';
 
-export default function handleProfileSignup() {
-  return Promise.all([uploadPhoto(), createUser()])
-    .then((responses) => {
-      // eslint-disable-next-line no-unused-vars
-      const [photoResponse, userResponse] = responses;
-      console.log(`${userResponse.body.firstName} ${userResponse.body.lastName}`);
+// eslint-disable-next-line no-unused-vars
+function handleProfileSignup() {
+  Promise.all([uploadPhoto(), createUser()])
+    // eslint-disable-next-line no-unused-vars
+    .then(([photoResponse, userResponse]) => {
+      console.log(`First Name: ${userResponse.firstName}`);
+      console.log(`Last Name: ${userResponse.lastName}`);
     })
     .catch(() => {
       console.log('Signup system offline');
