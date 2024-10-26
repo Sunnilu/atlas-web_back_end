@@ -1,27 +1,10 @@
-class APIHandler {
-    getResponseFromAPI() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          const randomInt = Math.floor(Math.random() * 100);
-          if (randomInt < 50) {
-            resolve({ status: "success", data: { message: "API call successful" } });
-          } else {
-            reject(new Error("API call failed"));
-          }
-        }, 2000); // Simulate API delay
-      });
-    }
-  }
-  
-  // Usage example
-  const apiHandler = new APIHandler();
-  
-  apiHandler.getResponseFromAPI()
-    .then(response => {
-      console.log("API Response:", response);
-    })
-    .catch(error => {
-      console.error("Error:", error.message);
-    });
-  
-  console.log
+// 0-promise.js
+export default function getResponseFromAPI() {
+  return new Promise((resolve, reject) => {
+    // Simulate an asynchronous operation (like an API call)
+    setTimeout(() => {
+      // it can resolve with a value or reject with an error
+      resolve("Response from API");
+    }, 1000; // Simulate a delay of 1 second
+  });
+}
