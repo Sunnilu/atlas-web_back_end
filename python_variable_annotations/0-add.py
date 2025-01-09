@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env 
 """
 Script for a type_annotated function 'add' that takes a float 'a' and a float 'b' as agruments and returns their sum as a float
 """
