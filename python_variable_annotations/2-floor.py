@@ -12,7 +12,5 @@ def floor(n: float) -> int:
 
     Args:
         n (float): The number to floor.
-
-    Returns:
-        int: The floor of `n`.
     """
+    return math.floor(n)   
