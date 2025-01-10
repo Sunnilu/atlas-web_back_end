@@ -6,8 +6,8 @@ import asyncio
 import time
 from typing import List
 
-# Dynamically import the wait_random function from 0-basic_syntax.py
-wait_random = __import__('0-basic_syntax').wait_random
+# Dynamically import the wait_random function from 1-concurrent_coroutines.py
+wait_n = __import__('1-concurrent_coroutines').wait_n
 
 
 def measure_time(n: int, max_delay: int) -> float:
