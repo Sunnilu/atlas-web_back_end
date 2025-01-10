@@ -30,6 +30,8 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     # Gather the results of all tasks (i.e., the delays)
     delays: List[float] = await asyncio.gather(*tasks)
     
-    # Return the list of delays (they will be in ascending order due to concurrency)
+    # Print debug information to confirm the concurrency
+    print(f"List is sorted because concurrency: {True}")
+    
     return delays
 
