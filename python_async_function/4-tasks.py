@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 """Asynchronous coroutine to spawn tasks using task_wait_random."""
 
 import asyncio
