@@ -5,11 +5,16 @@
 import asyncio
 from typing import List
 
-from wait_random import wait_random  # Assume wait_random is defined in a separate module
+# Assume wait_random is defined in the same file for this example
+async def wait_random(max_delay: int) -> float:
+    """Simulate a random delay and return the delay."""
+    delay = random.uniform(0, max_delay)
+    await asyncio.sleep(delay)
+    return delay
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
     """
-    Spawns `wait_random` n times with the specified max_delay. 
+    Spawns `wait_random` n times with the specified max_delay.
     Returns a list of delays (float values) in ascending order.
 
     Args:
@@ -19,7 +24,7 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     Returns:
         List[float]: A list of delays in ascending order.
     """
-    # Create a list of tasks (coroutines) that each call wait_random with max_delay
+    # Create a list of tasks that each call wait_random with max_delay
     tasks: List[asyncio.Future] = [wait_random(max_delay) for _ in range(n)]
     
     # Gather the results of all tasks (i.e., the delays)
