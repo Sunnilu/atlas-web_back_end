@@ -4,8 +4,8 @@
 import asyncio
 from typing import List
 
-#Take the code from wait_n and alter it into a new function task_wait_n.
-wait_n = __import__('1-concurrent_coroutines').wait_n
+# Import task_wait_random from the correct file
+task_wait_random = __import__('1-concurrent_coroutines').task_wait_random
 
 
 async def task_wait_n(n: int, max_delay: int) -> List[float]:
@@ -25,3 +25,4 @@ async def task_wait_n(n: int, max_delay: int) -> List[float]:
     results = await asyncio.gather(*tasks)
     
     return results
+
