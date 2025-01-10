@@ -3,12 +3,12 @@
 
 
 import asyncio
+import random  # Import the random module
 from typing import List
 
-# Assume wait_random is defined in the same file for this example
 async def wait_random(max_delay: int) -> float:
     """Simulate a random delay and return the delay."""
-    delay = random.uniform(0, max_delay)
+    delay = random.uniform(0, max_delay)  # random.uniform requires random to be imported
     await asyncio.sleep(delay)
     return delay
 
@@ -32,3 +32,4 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     
     # Return the list of delays (they will be in ascending order due to concurrency)
     return delays
+
