@@ -12,7 +12,7 @@ wait_n = __import__('1-concurrent_coroutines').wait_n
 
 def measure_time(n: int, max_delay: int) -> float:
     """
-    Measures execution time `wait_n(n, max_delay)` returns average time per task.
+    Measures execution time `wait_n(n, max_delay)` returns average time task.
 
     Args:
         n (int): The number of tasks to run.
