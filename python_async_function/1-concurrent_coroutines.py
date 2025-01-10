@@ -4,6 +4,7 @@
 
 import asyncio
 from typing import List
+
 from wait_random import wait_random  # Assume wait_random is defined in a separate module
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
@@ -18,12 +19,11 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     Returns:
         List[float]: A list of delays in ascending order.
     """
-    # Create a list of tasks that each call wait_random with max_delay
-    tasks = [wait_random(max_delay) for _ in range(n)]
+    # Create a list of tasks (coroutines) that each call wait_random with max_delay
+    tasks: List[asyncio.Future] = [wait_random(max_delay) for _ in range(n)]
     
-    # Gather the results of all tasks, i.e., the delays
-    delays = await asyncio.gather(*tasks)
+    # Gather the results of all tasks (i.e., the delays)
+    delays: List[float] = await asyncio.gather(*tasks)
     
-    # Since asyncio.gather collects the results as they finish, 
-    # the delays will naturally be in ascending order due to their concurrent nature
+    # Return the list of delays (they will be in ascending order due to concurrency)
     return delays
