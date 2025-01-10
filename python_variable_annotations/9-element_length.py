@@ -10,12 +10,12 @@ def element_length(lst: List[str]) -> List[Tuple[str, int]]:
     a string and its length.
 
     Parameters:
-    lst (List[str]): A list of strings to be processed.
+    lst (List[str]): A list of strings.
 
     Returns:
-    List[Tuple[str, int]]: A list of tuples, where each tuple contains a string
-    and its corresponding length as an integer.
+    List[Tuple[str, int]]: A list of tuples where each tuple contains a string 
+    and its length as an integer.
     """
     
-    # Generate a list of tuples (string, length of string)
+    # Create a list of tuples containing the string and its length
     return [(i, len(i)) for i in lst]
