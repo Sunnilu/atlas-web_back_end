@@ -1,4 +1,5 @@
-#! usr/bin/env python3
+#!/usr/bin/env python3
+
 """Annotate variables with the specified values"""
 
 a: int = 1
