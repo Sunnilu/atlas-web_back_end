@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""measure_time function with integers n and max_delay as arguments that measures the total execution time."""
+"""measure_time function with integers n and measures the total execution time."""
 
 
 import asyncio
@@ -12,7 +12,7 @@ wait_n = __import__('1-concurrent_coroutines').wait_n
 
 def measure_time(n: int, max_delay: int) -> float:
     """
-    Measures the execution time for `wait_n(n, max_delay)` and returns the average time per task.
+    Measures the execution time for `wait_n(n, max_delay)` returns average time per task.
 
     Args:
         n (int): The number of tasks to run.
