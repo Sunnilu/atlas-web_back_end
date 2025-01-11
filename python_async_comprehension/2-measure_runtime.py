@@ -5,7 +5,7 @@
 import asyncio
 import random
 import time
-from typing import List
+from typing import List, Generator
 
 
 async def async_generator() -> Generator[float, None, None]:
@@ -52,7 +52,7 @@ async def measure_runtime() -> float:
     """
     start_time = time.time()  # Start measuring time
 
-    # Execute async_comprehension four times in parallel
+    # Execute async_comprehension four times in parallel using asyncio.gather
     await asyncio.gather(
         async_comprehension(),
         async_comprehension(),
