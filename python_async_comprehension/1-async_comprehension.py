@@ -4,7 +4,7 @@
 
 import asyncio
 import random
-from typing import Generator
+from typing import List
 
 
 # Import async_generator from the previous task
@@ -25,13 +25,13 @@ async def async_generator() -> Generator[float, None, None]:
 
 
 # New coroutine async_comprehension
-async def async_comprehension() -> list[float]:
+async def async_comprehension() -> List[float]:
     """
     Asynchronously collects 10 random numbers from the async_generator 
     using an async comprehension and returns them as a list.
 
     Returns:
-        list: A list of 10 random numbers collected from async_generator.
+        List[float]: A list of 10 random numbers collected from async_generator.
     """
     return [num async for num in async_generator()]
 
@@ -45,3 +45,4 @@ async def main():
 # Run the main function to see the output
 if __name__ == "__main__":
     asyncio.run(main())
+
