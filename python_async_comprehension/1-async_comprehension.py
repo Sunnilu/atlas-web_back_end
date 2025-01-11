@@ -4,7 +4,7 @@
 
 import asyncio
 import random
-from typing import Generator
+from typing import List
 
 
 async def async_generator() -> Generator[float, None, None]:
@@ -23,18 +23,18 @@ async def async_generator() -> Generator[float, None, None]:
         yield random.randint(0, 10)  # Yield a random integer between 0 and 10
 
 
-async def async_comprehension() -> list[float]:
+async def async_comprehension() -> List[float]:
     """
-    Asynchronously collects 10 random numbers from the async_generator 
+    Asynchronously collects 10 random integers from the async_generator 
     using an async comprehension and returns them as a list.
 
     This coroutine demonstrates the usage of async comprehension to 
     gather values from the async_generator and accumulate them in a list.
 
     Returns:
-        list: A list of 10 random integers collected from async_generator.
+        List[float]: A list of 10 random numbers collected from async_generator.
     """
-    return [num async for num in async_generator()]
+    return [float(num) async for num in async_generator()]
 
 
 async def main():
