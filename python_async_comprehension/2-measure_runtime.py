@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""write a measure_runtime coroutine execute async_comprehension four times in parallel"""
+"""write a measure_runtime coroutine execute async_comprehension four times"""
 
 
 import asyncio
 import random
 import time
 from typing import List, Generator
+
 
 async def async_generator() -> Generator[float, None, None]:
     """
@@ -22,6 +23,7 @@ async def async_generator() -> Generator[float, None, None]:
         await asyncio.sleep(1)  # Wait for 1 second asynchronously
         yield random.randint(0, 10)  # Yield a random integer between 0 and 10
 
+
 async def async_comprehension() -> List[float]:
     """
     Asynchronously collects 10 random integers from the async_generator 
@@ -31,6 +33,7 @@ async def async_comprehension() -> List[float]:
         List[float]: A list of 10 random numbers collected from async_generator.
     """
     return [float(num) async for num in async_generator()]
+
 
 async def measure_runtime() -> float:
     """
