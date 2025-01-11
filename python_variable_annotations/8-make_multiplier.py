@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" type-annotated function make_multiplier multiplies a float by multiplier """
+""" type-annotated function make_multiplier multiplies float by multiplier """
 
 from typing import Callable
 
@@ -19,7 +19,7 @@ def make_multiplier(multiplier: float) -> Callable[[float], float]:
     def multiplier_function(value: float) -> float:
         """
         Multiplies the input value by the multiplier.
-    
+
         Parameters:
         value (float): The number to be multiplied.
 
