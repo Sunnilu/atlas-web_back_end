@@ -62,7 +62,7 @@ async def measure_runtime() -> float:
 
 async def main():
     """
-    Runs the measure_runtime coroutine and prints the total runtime of the 
+    Runs the measure_runtime coroutine and prints the total runtime of the
     async_comprehension coroutines executed in parallel.
     """
     runtime = await measure_runtime()
