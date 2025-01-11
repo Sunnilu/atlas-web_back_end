@@ -7,7 +7,11 @@ import random
 from typing import Generator
 
 
-async def async_generator() -> Generator[int, None, None]:
+async def async_comprehension() -> list[int]:
+    result = []
+    async for num in async_generator():
+        result.append(num)
+    return result
     """
     Asynchronous generator that yields a random integer between 0 and 10,
     one value per second, for 10 iterations.
