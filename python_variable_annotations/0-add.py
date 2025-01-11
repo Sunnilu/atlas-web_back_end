@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Script for a type_annotated function 'add' that takes a float 'a' and a float 'b' as agruments and returns their sum as a float
+Script for a type_annotated function returns their sum as a float
 """
+
 
 def add(a: float, b: float) -> float:
     """Adds two floats and returns the sum.
@@ -13,4 +14,6 @@ def add(a: float, b: float) -> float:
     Returns:
         float: The sum of 'a' and 'b'
     """
+
     return a + b
+    
