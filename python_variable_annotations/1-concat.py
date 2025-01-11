@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-""" A type-annotated function concat that takes a string str1 and a string str2 as argumenst and returns a concatenated string
-"""
+"""A type-annotated function concat that takes two strings and returns their concatenated result."""
+
 def concat(str1: str, str2: str) -> str:
-    """concatenates two strings and returns their concatenated result
+    """Concatenates two strings and returns their concatenated result.
 
     Args:
-        str1 (str): the first str.
-        str2 (str): the second str.
+        str1 (str): The first string.
+        str2 (str): The second string.
 
-    Return:
-        str: a concatenated string.
+    Returns:
+        str: The concatenated string.
     """
-
+    
     return str1 + str2
+
