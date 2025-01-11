@@ -26,22 +26,22 @@ async def async_generator() -> Generator[float, None, None]:
 
 async def async_comprehension() -> List[float]:
     """
-    Asynchronously collects 10 random integers from the async_generator 
+    Asynchronously collects 10 random integers from the async_generator
     using an async comprehension and returns them as a list.
 
     Returns:
-        List[float]: A list of 10 random numbers collected from async_generator.
+        List[float]: A list of 10 random numbers collected async_generator.
     """
     return [float(num) async for num in async_generator()]
 
 
 async def measure_runtime() -> float:
     """
-    Executes the async_comprehension coroutine four times in parallel using 
+    Executes the async_comprehension coroutine four times in parallel using
     asyncio.gather, and measures the total runtime.
 
     Returns:
-        float: The total runtime for executing the four async_comprehension 
+        float: The total runtime for executing the four async_comprehension
                coroutines concurrently.
     """
     start_time = time.time()  # Start measuring time
@@ -53,11 +53,12 @@ async def measure_runtime() -> float:
         async_comprehension(),
         async_comprehension()
     ]
-    
+
     await asyncio.gather(*coroutines)  # Pass the coroutines as a list using *
-    
+
     end_time = time.time()  # End measuring time
     return end_time - start_time  # Return the total runtime
+
 
 async def main():
     """
