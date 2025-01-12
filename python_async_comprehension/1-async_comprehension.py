@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-'''
-This module contains the async_comprehension coroutine, which collects 10 random
-numbers using async_generator with an async comprehension.
-'''
-
-
+"""async comprehensing over async_generator, then return the 10 random numbers."""
 import asyncio
 
-# Import async_generator from the previous task
+
+# Assuming async_generator is imported
 async_generator = __import__('0-async_generator').async_generator
 
 async def async_comprehension():
@@ -17,5 +13,10 @@ async def async_comprehension():
     Returns:
         list: A list of 10 random numbers yielded by async_generator.
     '''
-    # Use async comprehension to collect 10 random numbers
-    return [i async for i in async_generator()][:10]
+    try:
+        # Use async comprehension to collect 10 random numbers
+        result = [i async for i in async_generator()][:10]
+        return result
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None
