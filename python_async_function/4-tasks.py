@@ -1,29 +1,30 @@
 #!/usr/bin/env python3
-"""Asynchronous coroutine to spawn tasks using task_wait_random."""
+"""change wait_n adjust to wait_random"""
+
 
 import asyncio
-from typing import List
+import random
 
-#Take the code from wait_n and alter it into a new function task_wait_n.
-wait_n = __import__('1-concurrent_coroutines').wait_n
+# Same wait_random function
+async def wait_random(max_delay: int) -> float:
+    delay = random.uniform(0, max_delay)
+    await asyncio.sleep(delay)
+    return delay
 
+# New task_wait_random function that returns a Task
+async def task_wait_random(max_delay: int) -> asyncio.Task:
+    return asyncio.create_task(wait_random(max_delay))
 
-async def task_wait_n(n: int, max_delay: int) -> List[float]:
-    """Creates n tasks for the task_wait_random coroutine and returns their results.
+# Altered wait_n function to use task_wait_random
+async def task_wait_n(n: int, max_delay: int):
+    tasks = []
+    for _ in range(n):
+        task = task_wait_random(max_delay)
+        tasks.append(task)
 
-    Parameters:
-    n (int): The number of tasks to run.
-    max_delay (int): The maximum delay for each task.
+    # Gather the results once all tasks are done
+    delays = await asyncio.gather(*tasks)
+    return delays
 
-    Returns:
-    List[float]: A list of float values representing the delays.
-    """
-    # Create a list of tasks using task_wait_random
-    tasks = [task_wait_random(max_delay) for _ in range(n)]
-    
-    # Wait for all tasks to complete and gather the results
-    results = await asyncio.gather(*tasks)
-    
-    return results
 
 
