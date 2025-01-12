@@ -33,6 +33,9 @@ async def async_comprehension() -> List[float]:
     try:
         # Use async comprehension to collect 10 random numbers
         result = [i async for i in async_generator()][:10]
+        
+        # Debugging: Check if all values are floats
+        print(all(isinstance(i, float) for i in result))  # This should print True
         return result
     except Exception as e:
         print(f"Error occurred: {e}")
