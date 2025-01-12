@@ -4,8 +4,10 @@ async_comprehension coroutine, which collects 10 random
 numbers using async_generator with an async comprehension.
 '''
 
+
 import asyncio
 from typing import List  # Import List from typing for type annotations
+
 
 # Assuming async_generator is imported
 async_generator = __import__('0-async_generator').async_generator
@@ -33,5 +35,3 @@ async def async_comprehension() -> List[float]:
     except Exception as e:
         print(f"Error occurred: {e}")
         return None
-
-
