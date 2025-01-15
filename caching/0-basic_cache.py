@@ -4,6 +4,7 @@
 
 from base_caching import BaseCaching
 
+
 class BasicCache(BaseCaching):
     """
     BasicCache is a simple caching system that inherits from BaseCaching.
