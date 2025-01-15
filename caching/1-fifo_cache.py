@@ -19,7 +19,7 @@ class FIFOCache(BaseCaching):
     def put(self, key, item):
         """
         Assigns the given item to the cache with the specified key.
-    
+
         If either key or item is None, the method does nothing.
         If the number of items exceeds MAX_ITEMS, the oldest item is discarded
         following the FIFO algorithm.
@@ -34,7 +34,7 @@ class FIFOCache(BaseCaching):
             else:
                 # If key already exists, update the value
                 self.cache_data[key] = item
-   
+
             # Check if the cache exceeds the maximum allowed items
             if len(self.cache_data) > BaseCaching.MAX_ITEMS:
                 # Pop the first inserted item (FIFO eviction)
