@@ -9,17 +9,17 @@ class BasicCache(BaseCaching):
     """
     BasicCache is a simple caching system that inherits from BaseCaching.
     This class does not have any limit on the number of items stored.
-    
+
     Methods:
         put(key, item):
             Stores the item in the cache associated with the given key.
             If either the key or the item is None, nothing is stored.
-        
+
         get(key):
             Retrieves the item associated with the given key from the cache.
             Returns None if the key does not exist or if the key is None.
     """
-    
+
     def __init__(self):
         """Initialize the BasicCache instance."""
         super().__init__()
