@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-'''Simple Paganation'''
+'''method named get_page that takes two integer arguments'''
 
 
 import csv
 import math
 from typing import List
 
-# index_range is defined in the module 0-simple_helper_function
+#index_range is defined in the module 0-simple_helper_function
 index_range = __import__('0-simple_helper_function').index_range
 
 class Server:
