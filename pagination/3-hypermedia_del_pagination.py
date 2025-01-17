@@ -6,6 +6,7 @@ Deletion-resilient hypermedia pagination
 import csv
 from typing import List, Dict
 
+
 class Server:
     """Server class to paginate a database of popular baby names."""
     DATA_FILE = "Popular_Baby_Names.csv"
