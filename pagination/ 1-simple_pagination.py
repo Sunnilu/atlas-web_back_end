@@ -6,7 +6,7 @@ import csv
 import math
 from typing import List
 
-# Assuming index_range is defined in the module 0-simple_helper_function
+# index_range is defined in the module 0-simple_helper_function
 index_range = __import__('0-simple_helper_function').index_range
 
 class Server:
