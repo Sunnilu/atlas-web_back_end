@@ -31,7 +31,7 @@ class Server:
         """Retrieve a page of data"""
         # both page and page_size are positive integers
         assert isinstance(page, int) and page > 0, "Page positive integer"
-        assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer"
+        assert isinstance(page_size, int) and page_size > 0, "Page size positive integer"
 
         # Get the indices for the requested page
         start, end = index_range(page, page_size)
@@ -39,7 +39,7 @@ class Server:
         # Get the dataset
         dataset = self.dataset()
 
-        # Return the slice of dataset for the page, or an empty list if out of range
+        # Return the slice of dataset, or an empty list if out of range
         return dataset[start:end]
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
