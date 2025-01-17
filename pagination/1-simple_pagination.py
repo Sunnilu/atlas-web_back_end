@@ -11,7 +11,7 @@ def index_range(page: int, page_size: int) -> tuple:
     """Returns a tuple of size two containing the start and end index
     corresponding to the requested page and page size."""
     assert isinstance(page, int) and page > 0, "Page must be positive integer"
-    assert isinstance(page_size, int) and page_size > 0, "Page size positive integer"
+    assert isinstance(page_size, int) and page_size > 0, "Page size pos int"
 
     start = (page - 1) * page_size
     end = start + page_size
@@ -37,10 +37,10 @@ class Server:
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Returns the appropriate page from the dataset."""
         assert isinstance(page, int) and page > 0, "Page must positive integer"
-        assert isinstance(page_size, int) and page_size > 0, "Page size positive int"
+        assert isinstance(page_size, int) and page_size > 0, "Page size pos int"
 
         dataset = self.dataset()  # Get the full dataset
-        start, end = index_range(page, page_size)  # Get range using index_range
+        start, end = index_range(page, page_size)  # range using index_range
 
         if start >= len(dataset):
             return []  # If the start index is beyond the length of the dataset, return an empty list
