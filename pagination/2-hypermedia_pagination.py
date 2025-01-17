@@ -31,7 +31,7 @@ class Server:
         """Retrieve a page of data"""
         # both page and page_size are positive integers
         assert isinstance(page, int) and page > 0, "Page positive integer"
-        assert isinstance(page_size, int) and page_size > 0, "Page size positive integer"
+        assert isinstance(page_size, int) and page_size > 0, "Page positive integer"
 
         # Get the indices for the requested page
         start, end = index_range(page, page_size)
