@@ -37,13 +37,12 @@ class Server:
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Returns the appropriate page from the dataset."""
         assert isinstance(page, int) and page > 0, "Page must positive integer"
-        assert isinstance(page_size, int) and page_size > 0, "Page size pos int"
+        assert isinstance(page_size, int) and page_size > 0, "Page pos int"
 
         dataset = self.dataset()  # Get the full dataset
         start, end = index_range(page, page_size)  # range using index_range
 
         if start >= len(dataset):
-            return []  # If the start index is beyond the length of the dataset, return an empty list
+            return []  # return an empty list
 
-        return dataset[start:end]  # Return the data within the calculated range
-
+        return dataset[start:end]  # Return data within the calculated range
