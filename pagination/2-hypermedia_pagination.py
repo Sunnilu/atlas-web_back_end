@@ -9,6 +9,7 @@ from typing import List, Dict
 # Using index_range is defined in the module 0-simple_helper_function
 index_range = __import__('0-simple_helper_function').index_range
 
+
 class Server:
     """Server class to paginate a database of popular baby names."""
     DATA_FILE = "Popular_Baby_Names.csv"
@@ -28,8 +29,8 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Retrieve a page of data"""
-        # Assert that both page and page_size are positive integers
-        assert isinstance(page, int) and page > 0, "Page must be a positive integer"
+        # both page and page_size are positive integers
+        assert isinstance(page, int) and page > 0, "Page positive integer"
         assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer"
 
         # Get the indices for the requested page
