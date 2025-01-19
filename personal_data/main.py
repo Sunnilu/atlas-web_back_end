@@ -10,3 +10,11 @@ messages = ["name=egg;email=eggmin@eggsample.com;password=eggcellent;date_of_bir
 
 for message in messages:
     print(filter_datum(fields, 'xxx', message, ';'))
+
+
+   
+hash_password = __import__('encrypt_password').hash_password
+
+password = "MyAmazingPassw0rd"
+print(hash_password(password))
+print(hash_password(password)) 
