@@ -9,9 +9,9 @@ def has_password(password: str) -> bytes:
     Returns a salted, hashed password, which is a byte string.
     Uses bcrypt package to perform the hashing (with hashpw).
     """
-    pass_encoded = password.encode()
-    pass_hashed = bcrypt.hashpw(pass_encoded, bcrypt.gensalt())
-    return pass_hashed  
+    pass_encoded: bytes = password.encode()  # Encoded password as bytes
+    pass_hashed: bytes = bcrypt.hashpw(pass_encoded, bcrypt.gensalt())  # Hashed password as bytes
+    return pass_hashed  # Return type is bytes
 
 def is_valid(hashed_password: bytes, password: str) -> bool:
     '''
@@ -22,5 +22,5 @@ def is_valid(hashed_password: bytes, password: str) -> bool:
         password: string type
     Use bcrypt to validate that the provided password matches the hashed password.
     '''
-    pass_encoded = password.encode()
-    return bcrypt.checkpw(pass_encoded, hashed_password)
+    pass_encoded: bytes = password.encode()  # Encoded password as bytes
+    return bcrypt.checkpw(pass_encoded, hashed_password)  # Returns True or False
