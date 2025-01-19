@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-'''filter_datum that returns the log message obfuscated'''
-
+''' 0. Regex-ing: filter_datum
+    1. Log formatter: class RedactingFormatter
+    2. Create logger
+    3. Connect to secure database
+    4. Read and filter data
+'''
 
 import re
 from typing import List
@@ -139,4 +143,5 @@ def main():
     database.close()
 
 
-if __name__ == '__main_
+if __name__ == '__main__':
+    main()
