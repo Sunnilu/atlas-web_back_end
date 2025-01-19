@@ -1,4 +1,4 @@
-#!/bin/usr/env Python3
+#!/bin/usr/env python3
 '''Encrypting passwords getting valid password'''
 
 
