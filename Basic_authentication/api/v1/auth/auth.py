@@ -1,5 +1,10 @@
+#!/usr/bin/env python3
+'''a class to manage the API authentication'''
+
+
 from typing import List, TypeVar
 from flask import request
+
 
 class Auth:
     """
