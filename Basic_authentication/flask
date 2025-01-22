@@ -1,10 +1,30 @@
-from flask import Flask
+from flask import Flask, jsonify, request
+from api.v1.auth.basic_auth import BasicAuth
+from models.user import User
 
 app = Flask(__name__)
+auth = BasicAuth()
 
-@app.route('/api/v1/status')
+@app.route('/api/v1/status', methods=['GET'])
 def status():
-    return {"status": "OK"}
+    """Public endpoint for checking API status."""
+    return jsonify({"status": "OK"}), 200
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+@app.route('/api/v1/users', methods=['GET'])
+def get_users():
+    """Protected endpoint for getting user information."""
+    # First, attempt to get the authenticated user using BasicAuth
+    user = auth.current_user(request)
+
+    if user is None:
+        # If no user is authenticated (either no Authorization header or invalid)
+        return jsonify({"error": "Unauthorized"}), 401
+
+    # If we successfully retrieve a user, we allow access to the resource
+    return jsonify({
+        "users": [{"email": user.email}]  # Just an example response
+    }), 200
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
