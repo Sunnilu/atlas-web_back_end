@@ -1,31 +1,26 @@
 #!/usr/bin/env python3
 '''Encrypting passwords and validating the password'''
 
+
 import bcrypt
 
-
-def hash_password(password: str) -> bytes:
+def is_valid(hashed_password: bytes, password: str) -> bool:
     """
-    Hashes a given password using bcrypt with a randomly generated salt.
-
-    This function will take a plain-text password, encode it to bytes,
-    generate a salt, and then return the hashed password as a byte string.
-
+    Validates a password by comparing it against a stored hashed password.
+    
+    This function takes a password and compares it against a pre-hashed password using bcrypt's checkpw function.
+    If the password matches the hashed version, it returns True, otherwise False.
+    
     Args:
-        password (str): The password to be hashed, provided as a string.
-
+        hashed_password (bytes): The hashed password stored in the database.
+        password (str): The plain-text password to check against the hashed password.
+    
     Returns:
-        bytes: The salted and hashed password, returned as a byte string.
-
+        bool: True if the password matches the hashed password, False otherwise.
+    
     Example:
-        hashed_pw = hash_password("my_secure_password")
+        is_valid(hashed_pw, "my_secure_password")
     """
-
-    # Generate a salt for bcrypt, using the default cost factor
-    salt = bcrypt.gensalt()
-
-    # Hash the password using bcrypt and the generated salt
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-
-    # Return the hashed password as a byte string
-    return hashed_password
+    
+    # Use bcrypt to check if the provided password matches the hashed password
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
