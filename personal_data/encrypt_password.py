@@ -3,6 +3,7 @@
 
 import bcrypt
 
+
 def hash_password(password: str) -> bytes:
     """
     Hashes a given password using bcrypt with a randomly generated salt.
@@ -12,14 +13,14 @@ def hash_password(password: str) -> bytes:
 
     Args:
         password (str): The password to be hashed, provided as a string.
- 
+
     Returns:
         bytes: The salted and hashed password, returned as a byte string.
 
     Example:
         hashed_pw = hash_password("my_secure_password")
     """
- 
+
     # Generate a salt for bcrypt, using the default cost factor
     salt = bcrypt.gensalt()
 
