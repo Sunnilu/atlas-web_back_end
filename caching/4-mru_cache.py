@@ -2,66 +2,56 @@
 '''MRUCache that inherits from BaseCaching'''
 
 
+from base_caching import BaseCaching
+
 class MRUCache(BaseCaching):
-    """
-    A caching system implementing the Most Recently Used (MRU) eviction policy.
-
-    Attributes:
-    cache_data (dict): Dictionary storing cached items (inherited from BaseCaching)
-    MAX_ITEMS (int): Maximum number of items allowed in the cache (from BaseCaching)
-
-    Methods:
-    put(key, item): Adds an item to the cache, evicting the most recently used item if full
-    get(key): Retrieves an item from the cache, moving it to the front
-    """
+    """MRU (Most Recently Used) caching system."""
 
     def __init__(self):
-        """
-        Initializes the MRUCache instance, calling the parent class constructor.
-        """
+        """Initialize the MRU cache."""
         super().__init__()
+        self.mru_order = []  # List to track MRU order
 
     def put(self, key, item):
         """
-        Adds an item to the cache.
+        Add an item to the cache.
 
         Args:
-        key: Cache key
-        item: Item to store
-
-        Notes:
-        - Does nothing if key or item is None
-        - Evicts the most recently used item if cache is full
+            key: The key of the item.
+            item: The value of the item.
         """
         if key is None or item is None:
             return
-        
+
+        if key in self.cache_data:
+            # Update MRU order
+            self.mru_order.remove(key)
+        self.mru_order.append(key)
+
         if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-            mru_key = max(self.cache_data.keys(), key=self.cache_data.get)
-            del self.cache_data[mru_key]
-            print(f"DISCARD: {mru_key}")
-        
+            # Discard the least recently used item
+            lru_key = self.mru_order.pop(0)
+            del self.cache_data[lru_key]
+            print("DISCARD: {}".format(lru_key))
+
         self.cache_data[key] = item
 
     def get(self, key):
         """
-        Retrieves an item from the cache.
+        Retrieve an item from the cache.
 
         Args:
-        key: Cache key
+            key: The key of the item.
 
         Returns:
-        Cached item if exists, otherwise None
-
-        Notes:
-        Moves retrieved item to the front of the cache
+            The value of the item if found, None otherwise.
         """
         if key is None or key not in self.cache_data:
             return None
-        
-        value = self.cache_data.pop(key)
-        self.cache_data[key] = value
-        return value
 
+        # Update MRU order
+        self.mru_order.remove(key)
+        self.mru_order.append(key)
+        return self.cache_data[key]
 
 
