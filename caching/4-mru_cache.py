@@ -54,4 +54,28 @@ class MRUCache(BaseCaching):
         self.mru_order.append(key)
         return self.cache_data[key]
 
+# --- Test Cases ---
+
+def test_mru_cache(max_items, num_items):
+    """
+    Test the MRU cache with given max_items and number of items to add.
+
+    Args:
+        max_items: Maximum number of items allowed in the cache.
+        num_items: Number of items to add to the cache.
+    """
+    BaseCaching.MAX_ITEMS = max_items
+    my_cache = MRUCache()
+
+    for i in range(num_items):
+        my_cache.put(str(i), str(i))
+
+# --- Run Tests ---
+
+print("Test with BaseCaching.MAX_ITEMS = 2 and 10 items:")
+test_mru_cache(2, 10)
+
+print("\nTest with BaseCaching.MAX_ITEMS = 5 and 10 items:")
+test_mru_cache(5, 10)
+
 
