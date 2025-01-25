@@ -1,95 +1,67 @@
 #!/usr/bin/env python3
-"""
-4-mru_cache module.
-This module defines the MRUCache class, which is a subclass of BaseCaching.
-It implements the Most Recently Used (MRU) eviction policy for caching.
-"""
-
-class BaseCaching:
-    """
-    BaseCaching is a base class for caching systems.
-
-    Attributes:
-        MAX_ITEMS (int): Maximum number of items allowed in the cache.
-        cache_data (dict): Dictionary to store cached items.
-    """
-    MAX_ITEMS = 4  # Default maximum number of items in the cache
-
-    def __init__(self):
-        """
-        Initializes the cache_data as an empty dictionary.
-        """
-        self.cache_data = {}  # Dictionary to store the cached items
+'''MRUCache that inherits from BaseCaching'''
 
 
 class MRUCache(BaseCaching):
     """
-    MRUCache class that implements the Most Recently Used (MRU) eviction policy.
+    A caching system implementing the Most Recently Used (MRU) eviction policy.
 
-    In this policy, when the cache exceeds the maximum allowed number of items (MAX_ITEMS),
-    the most recently used item is discarded.
+    Attributes:
+    cache_data (dict): Dictionary storing cached items (inherited from BaseCaching)
+    MAX_ITEMS (int): Maximum number of items allowed in the cache (from BaseCaching)
+
+    Methods:
+    put(key, item): Adds an item to the cache, evicting the most recently used item if full
+    get(key): Retrieves an item from the cache, moving it to the front
     """
 
     def __init__(self):
         """
-        Initializes the MRUCache. Calls the parent class constructor to initialize cache_data.
+        Initializes the MRUCache instance, calling the parent class constructor.
         """
         super().__init__()
 
     def put(self, key, item):
         """
-        Adds an item to the cache with the given key.
-
-        If the number of items exceeds MAX_ITEMS, it evicts the most recently used item.
+        Adds an item to the cache.
 
         Args:
-            key (str): The key to associate with the item.
-            item (str): The item to store in the cache.
+        key: Cache key
+        item: Item to store
 
-        If key or item is None, the method does nothing.
+        Notes:
+        - Does nothing if key or item is None
+        - Evicts the most recently used item if cache is full
         """
         if key is None or item is None:
             return
         
-        # Insert or update the item in the cache
-        self.cache_data[key] = item
-        
-        # If the cache exceeds MAX_ITEMS, evict the most recently used item
-        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            # Get the most recently added key (the last one in the dictionary)
-            mru_key = list(self.cache_data.keys())[-1]
-            
-            # Remove and discard the most recently added item
-            self.cache_data.pop(mru_key)
-            
-            # Print the discarded key
+        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+            mru_key = max(self.cache_data.keys(), key=self.cache_data.get)
+            del self.cache_data[mru_key]
             print(f"DISCARD: {mru_key}")
+        
+        self.cache_data[key] = item
 
     def get(self, key):
         """
-        Retrieves the value associated with the given key from the cache.
+        Retrieves an item from the cache.
 
         Args:
-            key (str): The key to retrieve the value for.
+        key: Cache key
 
         Returns:
-            str or None: The value associated with the key, or None if the key does not exist.
+        Cached item if exists, otherwise None
+
+        Notes:
+        Moves retrieved item to the front of the cache
         """
         if key is None or key not in self.cache_data:
             return None
         
-        return self.cache_data.get(key)
+        value = self.cache_data.pop(key)
+        self.cache_data[key] = value
+        return value
 
-    def print_cache(self):
-        """
-        Prints the current state of the cache in the format:
-        Current cache:
-        A: Hello
-        B: World
-        C: Holberton
-        """
-        print("Current cache:")
-        for key, value in self.cache_data.items():
-            print(f"{key}: {value}")
 
 
