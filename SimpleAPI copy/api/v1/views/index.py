@@ -24,3 +24,11 @@ def stats() -> str:
     stats = {}
     stats['users'] = User.count()
     return jsonify(stats)
+  
+  
+  @app_views.route('/unauthorized', strict_slashes=False)
+def unauthorized_endpoint():
+    """ GET /api/v1/unauthorized
+    Trigger a 401 Unauthorized error to test error handler
+    """
+    abort(401)  # This will trigger the custom 401 error handler defined in app.py
