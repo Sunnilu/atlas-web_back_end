@@ -1,7 +1,6 @@
+#!/usr/bin/env python3
+    '''user module'''
 
-class User(Base):
-    """ User class
-    """
 
     def __init__(self, *args: list, **kwargs: dict):
         """ Initialize a User instance
