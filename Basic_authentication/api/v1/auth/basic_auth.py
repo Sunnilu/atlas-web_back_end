@@ -3,10 +3,12 @@
 """
 
 
-from api.v1.auth.auth import Auth
+from api.v1.auth.basic_auth import Base
 from models.user import User
 import base64
 from typing import TypeVar
+from some_module import Base  # Import Base if it's supposed to be a class
+
 
 
 class BasicAuth(Auth):
