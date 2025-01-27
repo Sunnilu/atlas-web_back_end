@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """ Module of Index views
 """
-from flask import jsonify, abort
-from api.v1.views import app_views
-
+from flask import jsonify
+from api.v1.views import app_views  # This is the correct import
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status() -> str:
@@ -18,7 +17,7 @@ def status() -> str:
 def stats() -> str:
     """ GET /api/v1/stats
     Return:
-      - the number of each objects
+      - the number of each object
     """
     from models.user import User
     stats = {}
