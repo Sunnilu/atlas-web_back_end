@@ -46,20 +46,12 @@ def stats() -> str:
 
 @app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
 def unauthorized() -> str:
+    """ GET /api/v1/unauthorized
+    Return:
+      - Aborts with 401 Unauthorized status and JSON response
     """
-    GET /api/v1/unauthorized
-    Triggers a 401 Unauthorized error.
-    
-    This route is used to simulate an Unauthorized access error. It is typically
-    used to test the behavior of the application when the user does not have permission.
+    abort(401)  # Flask will automatically set the response Content-Type to application/json
 
-    Raises:
-        HTTPException (401): This will trigger a 401 Unauthorized error.
-    
-    Returns:
-        None: The route directly triggers an error (abort(401)).
-    """
-    abort(401)  # Immediately aborts the request with a 401 Unauthorized status
 
 
 @app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
