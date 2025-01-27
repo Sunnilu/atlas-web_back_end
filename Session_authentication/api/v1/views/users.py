@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+''' Users module'''
+
 
 from flask import Blueprint, jsonify, abort, request
 from models import User  # Assuming you have a User model that can fetch a user by user_id
