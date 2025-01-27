@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-    '''user module'''
+'''user module'''
 
 
     def __init__(self, *args: list, **kwargs: dict):
