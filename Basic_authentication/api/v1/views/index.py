@@ -9,6 +9,7 @@ This module contains the views (routes) for the main API endpoints such as:
 
 from flask import jsonify, abort
 from api.v1.views import app_views
+from flask import Blueprint, jsonify, abort
 
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
@@ -71,3 +72,21 @@ def forbidden() -> str:
         None: The route directly triggers an error (abort(403)).
     """
     abort(403)  # Immediately aborts the request with a 403 Forbidden status
+
+    app_views = Blueprint('app_views', __name__)
+
+@app_views.route('/api/v1/status', methods=['GET'])
+def status():
+    """
+    A simple status endpoint that returns a JSON response
+    with a status key and value of 'OK'.
+    """
+    return jsonify({"status": "OK"})
+
+@app_views.route('/api/v1/unauthorized', methods=['GET'])
+def unauthorized():
+    """
+    Endpoint to test Unauthorized (401) error handler.
+    This will trigger a 401 error and invoke the error handler.
+    """
+    abort(401)  # This triggers the 401 Unauthorized error handler
