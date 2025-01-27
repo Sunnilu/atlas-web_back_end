@@ -2,6 +2,9 @@
 '''user module'''
 
 
+class User(Base):
+    '''user class'''
+    
     def __init__(self, *args: list, **kwargs: dict):
         """ Initialize a User instance
         """
