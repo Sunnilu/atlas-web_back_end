@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+'''Index module'''
+
+
 from flask import Blueprint, jsonify, abort
 from api.v1.auth.basic_auth import BasicAuth
 
