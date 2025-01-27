@@ -3,42 +3,56 @@
 Route module for the API
 """
 
-
 from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
-from flask_cors import (CORS, cross_origin)
-import os
+from flask_cors import CORS
 
-
-app = Flask(__name__)
-app.register_blueprint(app_views)
-CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-
-
-@app.errorhandler(404)
-def not_found(error) -> str:
-    """ Not found handler
+def create_app() -> Flask:
     """
-    return jsonify({"error": "Not found"}), 404
-
-
-@app.errorhandler(401)
-def unauthorized(error) -> str:
-    """ Unauthorized handler
+    Creates and configures the Flask application instance.
+    
+    Returns:
+        Flask: Configured Flask application instance
     """
-    return jsonify({"error": "Unauthorized"}), 401
-
+    app = Flask(__name__)
+    app.config["DEBUG"] = False  # Disable debug mode for production
+    app.config["SECRET_KEY"] = getenv("SECRET_KEY")  # Load secret key from environment
+    
+    CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+    
+    @app.errorhandler(404)
+    def not_found(error):
+        """
+        Handles 404 Not Found errors
+        
+        Args:
+            error: Error object
+        
+        Returns:
+            tuple: JSON response with error message and HTTP status code
+        """
+        return jsonify({"error": "Not found"}), 404
+    
+    @app.errorhandler(401)
+    def unauthorized(error):
+        """
+        Handles 401 Unauthorized errors
+        
+        Args:
+            error: Error object
+        
+        Returns:
+            tuple: JSON response with error message and HTTP status code
+        """
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    app.register_blueprint(app_views)
+    
+    return app
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
+    app = create_app()
     app.run(host=host, port=port)
-
-# Testing the new error handler
-from api.v1.views import index  # Assuming index.py is in the same directory as api/v1/views/__init__.py
-
-@index.route("/api/v1/unauthorized")
-def unauthorized_endpoint():
-    abort(401)  # Raise a 401 error to trigger the custom error handler
-    return "This line will not be executed"  # This line is unreachable because abort raises an exception
