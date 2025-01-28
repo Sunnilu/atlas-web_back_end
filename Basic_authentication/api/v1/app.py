@@ -43,10 +43,19 @@ def create_app() -> Flask:
         '''Handles 401 Unauthorized errors'''
     
         return jsonify({"error": "Unauthorized"}), 401
-    
-    app.register_blueprint(app_views)
-    
-    return app
+
+    @app.before_request
+def before_request():
+    """ Before request
+    """
+    if auth and auth.require_auth(request.path, ['/api/v1/status/',
+                                                 '/api/v1/unauthorized/',
+                                                 '/api/v1/forbidden/']):
+        if not auth.authorization_header(request):
+            abort(401)
+        if not auth.current_user(request):
+            abort(403)
+            
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
