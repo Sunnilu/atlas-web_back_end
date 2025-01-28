@@ -7,6 +7,8 @@ from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
+import os
+
 
 def create_app() -> Flask:
     """
@@ -20,6 +22,11 @@ def create_app() -> Flask:
     app.config["SECRET_KEY"] = getenv("SECRET_KEY")  
     
     CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+
+    @app.errorhandler(403)
+    def forbidden(error) -> str:
+        '''Request forbidden'''
+        return jsonify({"error": "Forbidden"}), 403
     
     @app.errorhandler(404)
     def not_found(error):
