@@ -18,10 +18,15 @@ def create_app() -> Flask:
         Flask: Configured Flask application instance
     """
     app = Flask(__name__)
-    app.config["DEBUG"] = False 
-    app.config["SECRET_KEY"] = getenv("SECRET_KEY")  
-    
+    app.register_blueprint(app_views)
     CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+    auth = None
+    if os.getenv('AUTH_TYPE') == 'auth':
+        from api.v1.auth.auth import Auth
+        auth = Auth()
+    elif os.getenv('AUTH_TYPE') == "basic_auth":
+        from api.v1.auth.basic_auth import basic_auth
+        auth = BasicAuth()
 
     @app.errorhandler(403)
     def forbidden(error) -> str:
@@ -34,16 +39,9 @@ def create_app() -> Flask:
         return jsonify({"error": "Not found"}), 404
     
     @app.errorhandler(401)
-    def unauthorized(error):
-        """
-        Handles 401 Unauthorized errors
-        
-        Args:
-            error: Error object
-        
-        Returns:
-            tuple: JSON response with error message and HTTP status code
-        """
+    def unauthorized(error) -> str:
+        '''Handles 401 Unauthorized errors'''
+    
         return jsonify({"error": "Unauthorized"}), 401
     
     app.register_blueprint(app_views)
