@@ -16,8 +16,8 @@ def create_app() -> Flask:
         Flask: Configured Flask application instance
     """
     app = Flask(__name__)
-    app.config["DEBUG"] = False  # Disable debug mode for production
-    app.config["SECRET_KEY"] = getenv("SECRET_KEY")  # Load secret key from environment
+    app.config["DEBUG"] = False 
+    app.config["SECRET_KEY"] = getenv("SECRET_KEY")  
     
     CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
     
