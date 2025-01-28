@@ -29,16 +29,8 @@ def create_app() -> Flask:
         return jsonify({"error": "Forbidden"}), 403
     
     @app.errorhandler(404)
-    def not_found(error):
-        """
-        Handles 404 Not Found errors
-        
-        Args:
-            error: Error object
-        
-        Returns:
-            tuple: JSON response with error message and HTTP status code
-        """
+    def not_found(error) -> str:
+        '''Handles 404 Not Found errors'''
         return jsonify({"error": "Not found"}), 404
     
     @app.errorhandler(401)
