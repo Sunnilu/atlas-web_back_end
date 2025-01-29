@@ -22,13 +22,19 @@ def create_app() -> Flask:
     CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
     
     auth = None
+    
+    # Check the environment variable AUTH_TYPE
     if os.getenv('AUTH_TYPE') == 'auth':
         from api.v1.auth.auth import Auth
         auth = Auth()
     elif os.getenv('AUTH_TYPE') == "basic_auth":
         from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
-
+    elif os.getenv('AUTH_TYPE') == "session_auth":
+        # Import SessionAuth if AUTH_TYPE is 'session_auth'
+        from api.v1.auth.session_auth import SessionAuth
+        auth = SessionAuth()
+    
     @app.errorhandler(403)
     def forbidden(error) -> str:
         '''Request forbidden'''
