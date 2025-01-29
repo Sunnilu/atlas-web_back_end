@@ -6,6 +6,9 @@ from typing import TypeVar, List, Iterable
 from os import path
 import json
 import uuid
+from sqlalchemy.ext.declarative import declarative_base
+Base = declarative_base()
+
 
 
 TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S"
