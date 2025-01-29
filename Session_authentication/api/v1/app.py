@@ -20,12 +20,13 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.register_blueprint(app_views)
     CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+    
     auth = None
     if os.getenv('AUTH_TYPE') == 'auth':
         from api.v1.auth.auth import Auth
         auth = Auth()
     elif os.getenv('AUTH_TYPE') == "basic_auth":
-        from api.v1.auth.basic_auth import basic_auth
+        from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
 
     @app.errorhandler(403)
@@ -41,21 +42,24 @@ def create_app() -> Flask:
     @app.errorhandler(401)
     def unauthorized(error) -> str:
         '''Handles 401 Unauthorized errors'''
-    
         return jsonify({"error": "Unauthorized"}), 401
 
     @app.before_request
-def before_request():
-    """ Before request
-    """
-    if auth and auth.require_auth(request.path, ['/api/v1/status/',
-                                                 '/api/v1/unauthorized/',
-                                                 '/api/v1/forbidden/']):
-        if not auth.authorization_header(request):
-            abort(401)
-        if not auth.current_user(request):
-            abort(403)
-            
+    def before_request():
+        """ Before request handler """
+        if auth and auth.require_auth(request.path, ['/api/v1/status/',
+                                                     '/api/v1/unauthorized/',
+                                                     '/api/v1/forbidden/']):
+            if not auth.authorization_header(request):
+                abort(401)
+            current_user = auth.current_user(request)
+            if not current_user:
+                abort(403)
+            # Assign the current_user to the request object for use later in the request lifecycle
+            request.current_user = current_user
+
+    return app
+
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
