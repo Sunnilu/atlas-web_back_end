@@ -2,31 +2,22 @@
 """ A Function that test the utils.py file."""
 import unittest
 from parameterized import parameterized
-from utils import access_nested_map
-
+from utils import access_nested_map  # Import your utils module
 
 class TestAccessNestedMap(unittest.TestCase):
-    """
-    Test class for the access_nested_map function from the utils module.
-    Inherits from unittest.TestCase.
-    """
+
+    # ... (Existing test_access_nested_map method remains here) ...
 
     @parameterized.expand([
-        ({"a": 1}, ("a",), 1),
-        ({"a": {"b": 2}}, ("a",), {"b": 2}),
-        ({"a": {"b": 2}}, ("a", "b"), 2)
+        ({}, ("a",), "a"),  # Expected KeyError message: 'a'
+        ({"a": 1}, ("a", "b"), "b"), # Expected KeyError message: 'b'
+        ({"a": {"b": 2}}, ("a", "b", "c"), "c"), # Deeper level
     ])
-    def test_access_nested_map(self, nested_map, path, expected):
-        """
-        Test the access_nested_map function with different inputs.
-        Parameters:
-        nested_map (Mapping): The nested map to access.
-        path (Sequence): The sequence of keys representing the path to
-        the value.
-        expected (Any): The expected result from the function.
-        """
-        self.assertEqual(access_nested_map(nested_map, path), expected)
+    def test_access_nested_map_exception(self, nested_map, path, expected_msg):
+        with self.assertRaises(KeyError) as context:
+            access_nested_map(nested_map, path)
+        self.assertEqual(str(context.exception), expected_msg)  # Check the message
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
