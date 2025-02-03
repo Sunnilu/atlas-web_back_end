@@ -1,19 +1,32 @@
 #!/usr/bin/env python3
-""" A Function that tests the utils.py file."""
 import unittest
+from unittest import mock
 from parameterized import parameterized
-from utils import access_nested_map  
+import utils
 
-class TestAccessNestedMap(unittest.TestCase):
+class TestGetJson(unittest.TestCase):
+
     @parameterized.expand([
-        ({}, ("a",)),
-        ({"a": 1}, ("a", "b"))
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
     ])
-    def test_access_nested_map_exception(self, nested_map, path):
-        with self.assertRaises(KeyError) as cm:
-            access_nested_map(nested_map, path)
-        self.assertEqual(str(cm.exception), f"'{path[-1]}'")
-
+    def test_get_json(self, test_url, test_payload):
+        # Create mock response object
+        mock_response = mock.Mock()
+        mock_response.json.return_value = test_payload
+       
+        # Patch requests.get to return our mock response
+        with mock.patch('requests.get') as mock_get:
+            mock_get.return_value = mock_response
+           
+            # Call the function being tested
+            result = utils.get_json(test_url)
+           
+            # Verify get was called exactly once with correct URL
+            mock_get.assert_called_once_with(test_url)
+           
+            # Verify returned payload matches expected
+            self.assertEqual(result, test_payload)
 
 if __name__ == "__main__":
     unittest.main()
