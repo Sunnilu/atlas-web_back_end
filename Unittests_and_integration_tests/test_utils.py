@@ -2,7 +2,7 @@
 """ A Function that tests the utils.py file."""
 import unittest
 from parameterized import parameterized
-from utils import access_nested_map  # Ensure this is importing correctly from utils.py
+from utils import access_nested_map  # Ensure this import is correct
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -26,6 +26,25 @@ class TestAccessNestedMap(unittest.TestCase):
         expected (Any): The expected result from the function.
         """
         self.assertEqual(access_nested_map(nested_map, path), expected)
+
+    @parameterized.expand([
+        ({}, ("a",), "KeyError('a')"),
+        ({"a": 1}, ("a", "b"), "KeyError('b')")
+    ])
+    def test_access_nested_map_exception(self, nested_map, path, expected_message):
+        """
+        Test that a KeyError is raised when accessing a nested map with an invalid key path.
+        Parameters:
+        nested_map (Mapping): The nested map to access.
+        path (Sequence): The sequence of keys representing the path to
+        the value.
+        expected_message (str): The expected exception message.
+        """
+        with self.assertRaises(KeyError) as context:
+            access_nested_map(nested_map, path)
+
+        # Check that the exception message matches the expected one
+        self.assertEqual(str(context.exception), expected_message)
 
 
 if __name__ == "__main__":
