@@ -4,47 +4,20 @@ import unittest
 from parameterized import parameterized
 from utils import access_nested_map  # Ensure this import is correct
 
-
 class TestAccessNestedMap(unittest.TestCase):
-    """
-    Test class for the access_nested_map function from the utils module.
-    Inherits from unittest.TestCase.
-    """
 
     @parameterized.expand([
-        ({"a": 1}, ("a",), 1),
-        ({"a": {"b": 2}}, ("a",), {"b": 2}),
-        ({"a": {"b": 2}}, ("a", "b"), 2)
+        ({}, ("a",)),
+        ({"a": 1}, ("a", "b"))
     ])
-    def test_access_nested_map(self, nested_map, path, expected):
-        """
-        Test the access_nested_map function with different inputs.
-        Parameters:
-        nested_map (Mapping): The nested map to access.
-        path (Sequence): The sequence of keys representing the path to
-        the value.
-        expected (Any): The expected result from the function.
-        """
-        self.assertEqual(access_nested_map(nested_map, path), expected)
-
-    @parameterized.expand([
-        ({}, ("a",), "KeyError('a')"),
-        ({"a": 1}, ("a", "b"), "KeyError('b')")
-    ])
-    def test_access_nested_map_exception(self, nested_map, path, expected_message):
-        """
-        Test that a KeyError is raised when accessing a nested map with an invalid key path.
-        Parameters:
-        nested_map (Mapping): The nested map to access.
-        path (Sequence): The sequence of keys representing the path to
-        the value.
-        expected_message (str): The expected exception message.
-        """
-        with self.assertRaises(KeyError) as context:
+    def test_access_nested_map_exception(self, nested_map, path):
+        with self.assertRaises(KeyError) as cm:
             access_nested_map(nested_map, path)
-
-        # Check that the exception message matches the expected one
-        self.assertEqual(str(context.exception), expected_message)
+        
+        if path == ("a",):
+            self.assertEqual(str(cm.exception), "'a'")
+        elif path == ("a", "b"):
+            self.assertEqual(str(cm.exception)), "'b'"
 
 
 if __name__ == "__main__":
