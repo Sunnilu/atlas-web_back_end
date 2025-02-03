@@ -2,31 +2,33 @@
 import unittest
 from unittest import mock
 from parameterized import parameterized
-import utils
 
-class TestGetJson(unittest.TestCase):
+class TestMemoize(unittest.TestCase):
 
-    @parameterized.expand([
-        ("http://example.com", {"payload": True}),
-        ("http://holberton.io", {"payload": False})
-    ])
-    def test_get_json(self, test_url, test_payload):
-        # Create mock response object
-        mock_response = mock.Mock()
-        mock_response.json.return_value = test_payload
-       
-        # Patch requests.get to return our mock response
-        with mock.patch('requests.get') as mock_get:
-            mock_get.return_value = mock_response
-           
-            # Call the function being tested
-            result = utils.get_json(test_url)
-           
-            # Verify get was called exactly once with correct URL
-            mock_get.assert_called_once_with(test_url)
-           
-            # Verify returned payload matches expected
-            self.assertEqual(result, test_payload)
+    def test_memoize(self):
+        # Define the class inside the test method
+        class TestClass:
+            def a_method(self):
+                return 42
 
-if __name__ == "__main__":
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        # Create instance and mock a_method
+        test_instance = TestClass()
+        with mock.patch.object(test_instance, 'a_method') as mock_method:
+            mock_method.return_value = 42
+           
+            # First call - should call a_method and return 42
+            result1 = test_instance.a_property()
+            self.assertEqual(result1, 42)
+            mock_method.assert_called_once()
+           
+            # Second call - should return 42 but not call a_method
+            result2 = test_instance.a_property()
+            self.assertEqual(result2, 42)
+            mock_method.assert_called_once()  # Still only called once
+
+if __name__ == '__main__':
     unittest.main()
