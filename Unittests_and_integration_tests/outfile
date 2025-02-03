@@ -1,45 +1,7 @@
-test_access_nested_map_0 (test_utils.TestAccessNestedMap.test_access_nested_map_0)
-Test the access_nested_map function with different inputs [with nested_map={'a': 1}, path=('a',), expected=1]. ... ok
-test_access_nested_map_1 (test_utils.TestAccessNestedMap.test_access_nested_map_1)
-Test the access_nested_map function with different inputs [with nested_map={'a': {'b': 2}}, path=('a',), expected={'b': 2}]. ... ok
-test_access_nested_map_2 (test_utils.TestAccessNestedMap.test_access_nested_map_2)
-Test the access_nested_map function with different inputs [with nested_map={'a': {'b': 2}}, path=('a', 'b'), expected=2]. ... ok
-test_access_nested_map_exception_0 (test_utils.TestAccessNestedMap.test_access_nested_map_exception_0)
-Test that a KeyError is raised when accessing a nested map with an invalid key path [with nested_map={}, path=('a',), expected_message="KeyError('a')"]. ... FAIL
-test_access_nested_map_exception_1 (test_utils.TestAccessNestedMap.test_access_nested_map_exception_1)
-Test that a KeyError is raised when accessing a nested map with an invalid key path [with nested_map={'a': 1}, path=('a', 'b'), expected_message="KeyError('b')"]. ... FAIL
-
-======================================================================
-FAIL: test_access_nested_map_exception_0 (test_utils.TestAccessNestedMap.test_access_nested_map_exception_0)
-Test that a KeyError is raised when accessing a nested map with an invalid key path [with nested_map={}, path=('a',), expected_message="KeyError('a')"].
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/Users/sunthalucas/Downloads/atlas-web_back_end/.venv/lib/python3.12/site-packages/parameterized/parameterized.py", line 620, in standalone_func
-    return func(*(a + p.args), **p.kwargs, **kw)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/sunthalucas/Unittests_and integration_tests/atlas-web_back_end/Unittests_and_integration_tests/test_utils.py", line 47, in test_access_nested_map_exception
-    self.assertEqual(str(context.exception), expected_message)
-AssertionError: "'a'" != "KeyError('a')"
-- 'a'
-+ KeyError('a')
-
-
-======================================================================
-FAIL: test_access_nested_map_exception_1 (test_utils.TestAccessNestedMap.test_access_nested_map_exception_1)
-Test that a KeyError is raised when accessing a nested map with an invalid key path [with nested_map={'a': 1}, path=('a', 'b'), expected_message="KeyError('b')"].
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/Users/sunthalucas/Downloads/atlas-web_back_end/.venv/lib/python3.12/site-packages/parameterized/parameterized.py", line 620, in standalone_func
-    return func(*(a + p.args), **p.kwargs, **kw)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/sunthalucas/Unittests_and integration_tests/atlas-web_back_end/Unittests_and_integration_tests/test_utils.py", line 47, in test_access_nested_map_exception
-    self.assertEqual(str(context.exception), expected_message)
-AssertionError: "'b'" != "KeyError('b')"
-- 'b'
-+ KeyError('b')
-
+test_access_nested_map_exception_0 (test_utils.TestAccessNestedMap.test_access_nested_map_exception_0) ... ok
+test_access_nested_map_exception_1 (test_utils.TestAccessNestedMap.test_access_nested_map_exception_1) ... ok
 
 ----------------------------------------------------------------------
-Ran 5 tests in 0.001s
+Ran 2 tests in 0.000s
 
-FAILED (failures=2)
+OK
