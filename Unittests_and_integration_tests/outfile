@@ -1,0 +1,11 @@
+test_access_nested_map_0 (test_utils.TestAccessNestedMap.test_access_nested_map_0)
+Test the access_nested_map function with different inputs [with nested_map={'a': 1}, path=('a',), expected=1]. ... ok
+test_access_nested_map_1 (test_utils.TestAccessNestedMap.test_access_nested_map_1)
+Test the access_nested_map function with different inputs [with nested_map={'a': {'b': 2}}, path=('a',), expected={'b': 2}]. ... ok
+test_access_nested_map_2 (test_utils.TestAccessNestedMap.test_access_nested_map_2)
+Test the access_nested_map function with different inputs [with nested_map={'a': {'b': 2}}, path=('a', 'b'), expected=2]. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
