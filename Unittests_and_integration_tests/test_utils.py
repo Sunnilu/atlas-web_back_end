@@ -4,6 +4,8 @@ from unittest import mock
 from functools import wraps
 
 # Memoize decorator definition
+
+
 def memoize(fn):
     """Memoizes the result of the function to avoid re-execution."""
     cache_name = f"_{fn.__name__}_cache"
