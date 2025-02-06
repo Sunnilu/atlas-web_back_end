@@ -12,6 +12,8 @@ def get_locale():
     lang = request.accept_languages #.best_match(['en', 'fr'])
     return lang
 
+babel.init_app(app, locale_selector = get_locale)
+
 @app.route('/')
 def index():
     translated_text = _("Hello, World!")
