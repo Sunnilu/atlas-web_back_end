@@ -6,10 +6,10 @@ app = Flask(__name__)
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = './translations'
 
-babel = Babel(app, locale_selector = get_locale)
+babel = Babel(app)
 
 def get_locale():
-    lang = request.accept_languages #.best_match(['en', 'fr'])
+    lang = request.accept_languages.best_match(['en', 'fr'])
     return lang
 
 babel.init_app(app, locale_selector = get_locale)

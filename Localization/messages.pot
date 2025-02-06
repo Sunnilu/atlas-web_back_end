@@ -19,5 +19,5 @@ msgstr ""
 
 #: app.py:18
 msgid "Hello, World!"
-msgstr ""
+msgstr "Bonjour"
 
