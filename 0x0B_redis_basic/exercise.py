@@ -9,14 +9,14 @@ from typing import Union, Callable, Optional
 
 def count_calls(method: Callable) -> Callable:
     '''Decorator to count how many times a method is called.'''
-    
+
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
         '''Wrap method to increment its call count in Redis.'''
         key = method.__qualname__
         self._redis.incr(key)  # Increment the call count in Redis
         return method(self, *args, **kwargs)
-    
+
     return wrapper
 
 
@@ -29,13 +29,13 @@ def call_history(method: Callable) -> Callable:
         key = method.__qualname__
         # Store input arguments in Redis
         self._redis.rpush(f"{key}:inputs", str(args))
-        
+
         # Execute the method and store its output
         output = method(self, *args, **kwargs)
         self._redis.rpush(f"{key}:outputs", str(output))
-        
+
         return output
-    
+
     return wrapper
 
 
@@ -43,9 +43,9 @@ def replay(method: Callable) -> None:
     '''Replay the history of calls to a method from Redis.'''
 
     key = method.__qualname__
-    inputs = self._redis.lrange(f"{key}:inputs", 0, -1)
-    outputs = self._redis.lrange(f"{key}:outputs", 0, -1)
-    
+    inputs = method._redis.lrange(f"{key}:inputs", 0, -1)
+    outputs = method._redis.lrange(f"{key}:outputs", 0, -1)
+
     print(f"{key} was called {len(inputs)} times:")
     for input_data, output_data in zip(inputs, outputs):
         print(f"{key}(*{input_data.decode()}) -> {output_data.decode()}")
@@ -64,7 +64,7 @@ class Cache:
             print("Redis database flushed and connection is successful.")
         except redis.RedisError as e:
             raise ConnectionError(f"Redis connection error: {e}")
-    
+
     @count_calls
     @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
@@ -76,7 +76,7 @@ class Cache:
         self._redis.set(key, data)  # Store the data in Redis
         print(f"Data stored under key: {key}")
         return key
-    
+
     def get(self, key: str, fn: Optional[Callable] = None) -> Optional[Union[str, int, bytes, float]]:
         '''Retrieve data from Redis and optionally convert it using the provided function.'''
         data = self._redis.get(key)
@@ -85,17 +85,41 @@ class Cache:
         if fn:
             return fn(data)
         return data
-    
+
     def get_str(self, key: str) -> Optional[str]:
         '''Retrieve data from Redis and decode it as a string.'''
         return self.get(key, fn=lambda d: d.decode("utf-8"))
-    
+
     def get_int(self, key: str) -> Optional[int]:
         '''Retrieve data from Redis and convert it to an integer.'''
         return self.get(key, fn=int)
-    
+
     def get_call_count(self, method_name: str) -> int:
         '''Retrieve the call count for a particular method from Redis.'''
         count = self._redis.get(method_name)
         return int(count) if count else 0
+
+
+if __name__ == "__main__":
+    try:
+        # Initialize Cache instance
+        cache = Cache()
+
+        # Store data and automatically track calls
+        key = cache.store("foo")
+        print(f"Stored data under key: {key}")
+
+        key2 = cache.store("bar")
+        print(f"Stored data under key: {key2}")
+
+        # Replay the history of calls to store method
+        print("\nReplaying the history of store method calls:")
+        replay(cache.store)
+
+        # Get the number of times store has been called
+        store_call_count = cache.get_call_count("Cache.store")
+        print(f"\nCache.store was called {store_call_count} times.")
+
+    except Exception as e:
+        print(f"Error: {e}")
 
