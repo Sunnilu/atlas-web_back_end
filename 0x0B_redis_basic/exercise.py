@@ -141,4 +141,3 @@ class Cache:
         Converts the chaos into a number you can count on—hopefully.
         '''
         return self.get(key, int)
-
