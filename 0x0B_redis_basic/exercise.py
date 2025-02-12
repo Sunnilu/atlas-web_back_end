@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-'''Provide a cache class with method call counting'''
-
 import redis
 import uuid
 import functools
@@ -83,7 +81,6 @@ class Cache:
         if count is None:
             return 0
         return int(count)
-
 
 # Example usage of the Cache class
 if __name__ == "__main__":
