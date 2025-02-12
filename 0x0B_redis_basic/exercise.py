@@ -46,6 +46,17 @@ class Cache:
         
         # If a function is provided, apply it to the retrieved data
         if fn:
+            # Special handling if we try to convert a byte to an int
+            if fn == int:
+                try:
+                    # Attempt to decode byte data before converting to int if it's a valid number
+                    decoded_data = data.decode("utf-8")
+                    return int(decoded_data)  # Convert string number to integer
+                except (ValueError, UnicodeDecodeError):
+                    # If decoding or conversion fails, raise a clear error
+                    raise ValueError(f"Cannot convert data to int: {data}")
+            
+            # If function is not int, just apply the function normally
             return fn(data)
         
         # If no function is provided, return the data as it is
@@ -84,7 +95,8 @@ if __name__ == "__main__":
         # Run the test cases
         for value, fn in TEST_CASES.items():
             stored_key = cache.store(value)
-            assert cache.get(stored_key, fn=fn) == value
+            result = cache.get(stored_key, fn=fn)
+            assert result == value, f"Expected {value}, but got {result}"
             print(f"Test passed for value: {value}")
     
     except Exception as e:
