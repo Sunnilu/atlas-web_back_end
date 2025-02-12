@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-'''Cache system with method call tracking and input/output history.'''
-
+'''
+This module provides a Cache class that interacts with Redis to store
+'''
 import redis
 import uuid
 import functools
@@ -8,118 +9,136 @@ from typing import Union, Callable, Optional
 
 
 def count_calls(method: Callable) -> Callable:
-    '''Decorator to count how many times a method is called.'''
-
+    '''
+    Decorator that counts how many times a method is called using Redis.
+    Imagine counting how many times you've ignored the news about rising
+    sea levels. Redis does this for your method calls, one existential dread
+    at a time.
+    '''
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
-        '''Wrap method to increment its call count in Redis.'''
+        '''
+        Wrapper function that increments the count each time
+        the decorated method is called. Redis tracks it all like
+        keeping tabs on how many ice caps we have left or how many times
+        your pug asks for dinner.
+        '''
         key = method.__qualname__
-        self._redis.incr(key)  # Increment the call count in Redis
+        self._redis.incr(key)
         return method(self, *args, **kwargs)
 
     return wrapper
 
 
 def call_history(method: Callable) -> Callable:
-    '''Decorator to record method input/output in Redis.'''
-
+    '''
+    Decorator to store the history of inputs and outputs for a method.
+    Every time the method is called, the input is logged into one list,
+    and the output into another. Like keeping track of all your thoughts,
+    but in Redis, and they never fade away.
+    '''
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
-        '''Record inputs and outputs for the method in Redis.'''
-        key = method.__qualname__
-        # Store input arguments in Redis
-        self._redis.rpush(f"{key}:inputs", str(args))
+        inputs_key = method.__qualname__ + ":inputs"
+        outputs_key = method.__qualname__ + ":outputs"
 
-        # Execute the method and store its output
+        # Store input arguments as a string in the Redis list
+        self._redis.rpush(inputs_key, str(args))
+
+        # Call the original method and store its output
         output = method(self, *args, **kwargs)
-        self._redis.rpush(f"{key}:outputs", str(output))
+        self._redis.rpush(outputs_key, str(output))
 
         return output
 
     return wrapper
 
 
-def replay(method: Callable) -> None:
-    '''Replay the history of calls to a method from Redis.'''
+def replay(method: Callable):
+    '''
+    Function to display the history of calls made to a particular method.
+    Shows how many times the method was called, and replays the inputs and
+    outputs from previous calls. Like revisiting your embarrassing past, one
+    function call at a time, except now it's logged in Redis.
+    '''
+    redis_instance = method.__self__._redis
+    method_name = method.__qualname__
+    inputs_key = f"{method_name}:inputs"
+    outputs_key = f"{method_name}:outputs"
 
-    key = method.__qualname__
-    inputs = method._redis.lrange(f"{key}:inputs", 0, -1)
-    outputs = method._redis.lrange(f"{key}:outputs", 0, -1)
+    # Get the number of times the method was called
+    call_count = redis_instance.get(method_name).decode("utf-8")
 
-    print(f"{key} was called {len(inputs)} times:")
+    print(f"{method_name} was called {call_count} times:")
+
+    # Get the list of inputs and outputs
+    inputs = redis_instance.lrange(inputs_key, 0, -1)
+    outputs = redis_instance.lrange(outputs_key, 0, -1)
+
+    # Loop through inputs and outputs together
     for input_data, output_data in zip(inputs, outputs):
-        print(f"{key}(*{input_data.decode()}) -> {output_data.decode()}")
+        input_str = input_data.decode("utf-8")
+        output_str = output_data.decode("utf-8")
+        print(f"{method_name}(*{input_str}) -> {output_str}")
 
 
 class Cache:
-    '''Cache class that interacts with Redis to store data and track method calls.'''
+    '''
+    Cache class for storing and retrieving data in Redis.
+    It now tracks how many times its methods are called,
+    stores a history of inputs and outputs, and can replay the history
+    of method calls like a detailed audit of every little thing you've done.
+    '''
 
-    def __init__(self) -> None:
-        '''Initialize the Redis connection and flush the database.'''
-        try:
-            self._redis = redis.Redis()
-            if not self._redis.ping():
-                raise ConnectionError("Unable to connect to Redis server.")
-            self._redis.flushdb()
-            print("Redis database flushed and connection is successful.")
-        except redis.RedisError as e:
-            raise ConnectionError(f"Redis connection error: {e}")
+    def __init__(self):
+        '''
+        Initialize the Redis client and flush the database.
+        Basically wiping everything clean like deleting the record
+        of all those carbon emissions, so we can pretend everything’s fine.
+        '''
+        self._redis = redis.Redis()
+        self._redis.flushdb()
 
     @count_calls
     @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        '''Store data in Redis under a unique key and return the key.'''
-        if not isinstance(data, (str, bytes, int, float)):
-            raise TypeError(f"Unsupported data type: {type(data)}")
-
-        key = str(uuid.uuid4())  # Generate a unique key
-        self._redis.set(key, data)  # Store the data in Redis
-        print(f"Data stored under key: {key}")
+        '''
+        Store data in Redis with a unique key, count how many times
+        this method has been called, and keep a history of inputs and outputs.
+        Like storing away little pieces of hope and also remembering every
+        time you've tried to, in case you need to revisit your optimism later.
+        '''
+        key = str(uuid.uuid4())
+        self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable] = None) -> Optional[Union[str, int, bytes, float]]:
-        '''Retrieve data from Redis and optionally convert it using the provided function.'''
-        data = self._redis.get(key)
-        if data is None:
+    def get(
+        self, key: str, fn: Optional[Callable] = None
+    ) -> Optional[Union[str, bytes, int, float]]:
+        '''
+        Retrieve data from Redis, possibly transforming it.
+        Redis gives everything back in bytes, like handing you
+        a confusing climate report. You’ll need to decode it if you
+        want it to make sense.
+        '''
+        value = self._redis.get(key)
+        if value is None:
             return None
         if fn:
-            return fn(data)
-        return data
+            return fn(value)
+        return value
 
     def get_str(self, key: str) -> Optional[str]:
-        '''Retrieve data from Redis and decode it as a string.'''
-        return self.get(key, fn=lambda d: d.decode("utf-8"))
+        '''
+        Retrieve a string from Redis.
+        Redis speaks in bytecode, but this translates it back into words.
+        '''
+        return self.get(key, lambda d: d.decode("utf-8"))
 
     def get_int(self, key: str) -> Optional[int]:
-        '''Retrieve data from Redis and convert it to an integer.'''
-        return self.get(key, fn=int)
-
-    def get_call_count(self, method_name: str) -> int:
-        '''Retrieve the call count for a particular method from Redis.'''
-        count = self._redis.get(method_name)
-        return int(count) if count else 0
-
-
-if __name__ == "__main__":
-    try:
-        # Initialize Cache instance
-        cache = Cache()
-
-        # Store data and automatically track calls
-        key = cache.store("foo")
-        print(f"Stored data under key: {key}")
-
-        key2 = cache.store("bar")
-        print(f"Stored data under key: {key2}")
-
-        # Replay the history of calls to store method
-        print("\nReplaying the history of store method calls:")
-        replay(cache.store)
-
-        # Get the number of times store has been called
-        store_call_count = cache.get_call_count("Cache.store")
-        print(f"\nCache.store was called {store_call_count} times.")
-
-    except Exception as e:
-        print(f"Error: {e}")
+        '''
+        Retrieve an integer from Redis.
+        Converts the chaos into a number you can count on—hopefully.
+        '''
+        return self.get(key, int)
 
