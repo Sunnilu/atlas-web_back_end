@@ -90,33 +90,36 @@ class Cache:
             return 0
         return int(count)
 
+    def replay(self, method: Callable):
+        """Replay the call history for a particular method."""
+        key_inputs = f"{method.__qualname__}:inputs"
+        key_outputs = f"{method.__qualname__}:outputs"
+        
+        # Get the inputs and outputs history from Redis
+        inputs = self._redis.lrange(key_inputs, 0, -1)
+        outputs = self._redis.lrange(key_outputs, 0, -1)
+        
+        # Print the header
+        print(f"{method.__qualname__} was called {len(inputs)} times:")
+        
+        # Loop over inputs and outputs and display them
+        for input_data, output_data in zip(inputs, outputs):
+            # Print the formatted call history
+            print(f"{method.__qualname__}(*{eval(input_data)}) -> {output_data.decode('utf-8')}")
+
 # Example usage of the Cache class
 if __name__ == "__main__":
     try:
         cache = Cache()
         
-        # Store some string data
-        key = cache.store("my data")
-        print(f"Stored data under key: {key}")
+        # Store some data
+        key1 = cache.store("foo")
+        key2 = cache.store("bar")
+        key3 = cache.store(42)
         
-        # Store integer data
-        key2 = cache.store(123)
-        print(f"Stored data under key: {key2}")
+        # Replay the call history for the store method
+        cache.replay(cache.store)
         
-        # Test call history decorator by storing data multiple times
-        for _ in range(3):
-            cache.store("test data")
-        
-        # Retrieve the call history for store method inputs and outputs
-        key_inputs = f"Cache.store:inputs"
-        key_outputs = f"Cache.store:outputs"
-        
-        # Retrieve and print inputs and outputs
-        inputs = cache._redis.lrange(key_inputs, 0, -1)
-        outputs = cache._redis.lrange(key_outputs, 0, -1)
-        
-        print(f"Inputs: {inputs}")
-        print(f"Outputs: {outputs}")
-
     except Exception as e:
         print(f"Error: {e}")
+
