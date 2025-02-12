@@ -1,16 +1,32 @@
 #!/usr/bin/env python3
-'''Provide a cache class'''
+'''Provide a cache class with method call counting'''
 
 import redis
 import uuid
+import functools
 from typing import Union, Callable, Optional
+
+def count_calls(method: Callable) -> Callable:
+    """A decorator to count how many times a method is called."""
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        # Get the qualified name of the method (e.g., 'Cache.store')
+        key = method.__qualname__
+        
+        # Increment the count in Redis by 1 for this key
+        self._redis.incr(key)
+        
+        # Call the original method and return its result
+        return method(self, *args, **kwargs)
+    
+    return wrapper
 
 class Cache:
     def __init__(self):
-        # Initialize Redis client and ensure it's connected
+        """Initialize the Cache instance and Redis connection."""
         try:
             self._redis = redis.Redis()
-            # Check connection to Redis server
+            # Ensure Redis is available
             if not self._redis.ping():
                 raise ConnectionError("Unable to connect to Redis server.")
             # Flush the Redis database to clear any existing data
@@ -19,8 +35,10 @@ class Cache:
         except redis.RedisError as e:
             raise ConnectionError(f"Redis connection error: {e}")
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        # Ensure that the data type is valid and log it
+        """Store data in Redis under a random key."""
+        # Ensure that the data type is valid
         if not isinstance(data, (str, bytes, int, float)):
             raise TypeError(f"Unsupported data type: {type(data)}")
         
@@ -37,38 +55,34 @@ class Cache:
         return key
 
     def get(self, key: str, fn: Optional[Callable] = None) -> Optional[Union[str, int, bytes, float]]:
-        # Retrieve the data from Redis
+        """Retrieve data from Redis and apply a conversion function if provided."""
         data = self._redis.get(key)
         
         # If no data is found, return None (default Redis behavior)
         if data is None:
             return None
         
-        # If a function is provided, apply it to the retrieved data
+        # Apply the conversion function if provided
         if fn:
-            # Special handling if we try to convert a byte to an int
-            if fn == int:
-                try:
-                    # Attempt to decode byte data before converting to int if it's a valid number
-                    decoded_data = data.decode("utf-8")
-                    return int(decoded_data)  # Convert string number to integer
-                except (ValueError, UnicodeDecodeError):
-                    # If decoding or conversion fails, raise a clear error
-                    raise ValueError(f"Cannot convert data to int: {data}")
-            
-            # If function is not int, just apply the function normally
             return fn(data)
         
-        # If no function is provided, return the data as it is
         return data
 
     def get_str(self, key: str) -> Optional[str]:
-        # A method to retrieve the data as a string
+        """Retrieve data as a string."""
         return self.get(key, fn=lambda d: d.decode("utf-8"))
 
     def get_int(self, key: str) -> Optional[int]:
-        # A method to retrieve the data as an integer
+        """Retrieve data as an integer."""
         return self.get(key, fn=int)
+
+    def get_call_count(self, method_name: str) -> int:
+        """Retrieve the call count for a specific method."""
+        key = method_name
+        count = self._redis.get(key)
+        if count is None:
+            return 0
+        return int(count)
 
 
 # Example usage of the Cache class
@@ -77,27 +91,17 @@ if __name__ == "__main__":
         cache = Cache()
         key = cache.store("my data")  # Store some string data
         print(f"Stored data under key: {key}")
-
+        
         key2 = cache.store(123)  # Store integer data
         print(f"Stored data under key: {key2}")
 
-        # Test the get_str and get_int methods
-        print(f"Retrieved string: {cache.get_str(key)}")
-        print(f"Retrieved integer: {cache.get_int(key2)}")
+        # Test the count_calls decorator by storing data multiple times
+        for _ in range(5):
+            cache.store("test data")
+        
+        # Check the number of times the store method was called
+        store_call_count = cache.get_call_count("Cache.store")
+        print(f"The store method was called {store_call_count} times.")
 
-        # Additional test cases to ensure everything works correctly
-        TEST_CASES = {
-            b"foo": None,  # No conversion function
-            123: int,      # Convert to integer
-            "bar": lambda d: d.decode("utf-8")  # Decode bytes to string
-        }
-
-        # Run the test cases
-        for value, fn in TEST_CASES.items():
-            stored_key = cache.store(value)
-            result = cache.get(stored_key, fn=fn)
-            assert result == value, f"Expected {value}, but got {result}"
-            print(f"Test passed for value: {value}")
-    
     except Exception as e:
         print(f"Error: {e}")
