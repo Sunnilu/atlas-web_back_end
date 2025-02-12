@@ -3,7 +3,7 @@
 
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable, Optional
 
 class Cache:
     def __init__(self):
@@ -36,6 +36,29 @@ class Cache:
         # Return the generated key
         return key
 
+    def get(self, key: str, fn: Optional[Callable] = None) -> Optional[Union[str, int, bytes, float]]:
+        # Retrieve the data from Redis
+        data = self._redis.get(key)
+        
+        # If no data is found, return None (default Redis behavior)
+        if data is None:
+            return None
+        
+        # If a function is provided, apply it to the retrieved data
+        if fn:
+            return fn(data)
+        
+        # If no function is provided, return the data as it is
+        return data
+
+    def get_str(self, key: str) -> Optional[str]:
+        # A method to retrieve the data as a string
+        return self.get(key, fn=lambda d: d.decode("utf-8"))
+
+    def get_int(self, key: str) -> Optional[int]:
+        # A method to retrieve the data as an integer
+        return self.get(key, fn=int)
+
 
 # Example usage of the Cache class
 if __name__ == "__main__":
@@ -46,5 +69,23 @@ if __name__ == "__main__":
 
         key2 = cache.store(123)  # Store integer data
         print(f"Stored data under key: {key2}")
+
+        # Test the get_str and get_int methods
+        print(f"Retrieved string: {cache.get_str(key)}")
+        print(f"Retrieved integer: {cache.get_int(key2)}")
+
+        # Additional test cases to ensure everything works correctly
+        TEST_CASES = {
+            b"foo": None,  # No conversion function
+            123: int,      # Convert to integer
+            "bar": lambda d: d.decode("utf-8")  # Decode bytes to string
+        }
+
+        # Run the test cases
+        for value, fn in TEST_CASES.items():
+            stored_key = cache.store(value)
+            assert cache.get(stored_key, fn=fn) == value
+            print(f"Test passed for value: {value}")
+    
     except Exception as e:
         print(f"Error: {e}")
