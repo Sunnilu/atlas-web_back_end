@@ -4,18 +4,26 @@ import uuid
 import functools
 from typing import Union, Callable, Optional
 
-def count_calls(method: Callable) -> Callable:
-    """A decorator to count how many times a method is called."""
+def call_history(method: Callable) -> Callable:
+    """A decorator to store the history of inputs and outputs of the function."""
+    
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
         # Get the qualified name of the method (e.g., 'Cache.store')
-        key = method.__qualname__
+        key_inputs = f"{method.__qualname__}:inputs"
+        key_outputs = f"{method.__qualname__}:outputs"
         
-        # Increment the count in Redis by 1 for this key
-        self._redis.incr(key)
+        # Store the inputs in Redis by appending the string representation of args
+        self._redis.rpush(key_inputs, str(args))
         
-        # Call the original method and return its result
-        return method(self, *args, **kwargs)
+        # Call the original method
+        output = method(self, *args, **kwargs)
+        
+        # Store the output in Redis
+        self._redis.rpush(key_outputs, str(output))
+        
+        # Return the output of the original function
+        return output
     
     return wrapper
 
@@ -33,7 +41,7 @@ class Cache:
         except redis.RedisError as e:
             raise ConnectionError(f"Redis connection error: {e}")
 
-    @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Store data in Redis under a random key."""
         # Ensure that the data type is valid
@@ -86,19 +94,29 @@ class Cache:
 if __name__ == "__main__":
     try:
         cache = Cache()
-        key = cache.store("my data")  # Store some string data
+        
+        # Store some string data
+        key = cache.store("my data")
         print(f"Stored data under key: {key}")
         
-        key2 = cache.store(123)  # Store integer data
+        # Store integer data
+        key2 = cache.store(123)
         print(f"Stored data under key: {key2}")
-
-        # Test the count_calls decorator by storing data multiple times
-        for _ in range(5):
+        
+        # Test call history decorator by storing data multiple times
+        for _ in range(3):
             cache.store("test data")
         
-        # Check the number of times the store method was called
-        store_call_count = cache.get_call_count("Cache.store")
-        print(f"The store method was called {store_call_count} times.")
+        # Retrieve the call history for store method inputs and outputs
+        key_inputs = f"Cache.store:inputs"
+        key_outputs = f"Cache.store:outputs"
+        
+        # Retrieve and print inputs and outputs
+        inputs = cache._redis.lrange(key_inputs, 0, -1)
+        outputs = cache._redis.lrange(key_outputs, 0, -1)
+        
+        print(f"Inputs: {inputs}")
+        print(f"Outputs: {outputs}")
 
     except Exception as e:
         print(f"Error: {e}")
