@@ -1,4 +1,3 @@
-Redis as a Python Dictionary
 Redis stands for Remote Dictionary Service.
 
 “You mean, like a Python dictionary?” you may ask.
