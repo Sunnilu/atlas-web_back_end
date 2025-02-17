@@ -1,0 +1,7 @@
+test_access_nested_map_exception_0 (test_utils.TestAccessNestedMap.test_access_nested_map_exception_0) ... ok
+test_access_nested_map_exception_1 (test_utils.TestAccessNestedMap.test_access_nested_map_exception_1) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
