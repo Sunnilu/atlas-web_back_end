@@ -1,6 +1,11 @@
+---
+title: "MySQL Optimization"
+---
 
-MySQL
-How to optimize queries by adding indexes
-What is and how to implement stored procedures and functions in MySQL
-What is and how to implement views in MySQL
-What is and how to implement triggers in MySQL
+# Optimizing Queries by Adding Indexes in MySQL
+
+## Implementing Stored Procedures and Functions in MySQL
+
+## Implementing Views in MySQL
+
+## Implementing Triggers in MySQL
