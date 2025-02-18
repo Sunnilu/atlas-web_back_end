@@ -4,7 +4,6 @@
 
 -- Create index for partition optimization
 CREATE INDEX idx_origin ON bands(origin);
-
 WITH country_fans AS (
     SELECT 
         origin,
