@@ -4,8 +4,6 @@
 
 -- Create index for partition optimization
 
-DELIMITER //
-
 CREATE PROCEDURE RankCountriesByFans()
 BEGIN
     SELECT 
@@ -16,4 +14,4 @@ BEGIN
     ORDER BY nb_fans DESC;
 END //
 
-DELIMITER ;
+;
