@@ -1,12 +1,11 @@
 -- SQL SafeDiv the first by the second number or returns 0 number is equal to 0.
 
-DELIMITER //
 
 CREATE FUNCTION SafeDiv(a INT, b INT)
-RETURNS DECIMAL(10,4)
+RETURNS FLOAT
 DETERMINISTIC
 BEGIN
-    DECLARE result DECIMAL(10,4);
+    DECLARE result FLOAT;
     
     IF b = 0 THEN
         RETURN 0;
@@ -14,6 +13,4 @@ BEGIN
     
     SET result = a / b;
     RETURN result;
-END //
-
-DELIMITER ;
+END; 
