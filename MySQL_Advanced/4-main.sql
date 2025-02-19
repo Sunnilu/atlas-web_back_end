@@ -1,4 +1,4 @@
-Enter password: 
+
 -- Show and add orders
 SELECT * FROM items;
 SELECT * FROM orders;
