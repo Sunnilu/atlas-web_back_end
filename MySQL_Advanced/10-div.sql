@@ -1,7 +1,7 @@
 -- SQL SafeDiv the first by the second number or returns 0 number is equal to 0.
 DELIMITER //
 
-CREATE FUNCTION SafeDivi(a INT, b INT)
+CREATE FUNCTION SafeDiv(a INT, b INT)
 RETURNS FLOAT DETERMINISTIC
 BEGIN
     DECLARE result FLOAT;
