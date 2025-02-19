@@ -1,4 +1,5 @@
-// deletes all documents with name="Holberton school"
-db.school.deleteMany([
-    { name: "Holberton school" }
-])
+// Switch to the database specified by the command line parameter
+use DATABASE_NAME;
+
+// Delete all documents where name equals "Holberton school"
+db.school.deleteMany({ name: "Holberton school" });
