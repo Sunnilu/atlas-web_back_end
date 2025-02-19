@@ -4,14 +4,9 @@
 
 -- Create index for partition optimization
 
-CREATE PROCEDURE RankCountriesByFans()
-BEGIN
-    SELECT 
+SELECT 
         origin,
-        nb_fans,
-        DENSE_RANK() OVER (ORDER BY nb_fans DESC) as rank
+        COUNT(fans) as nb_fans
     FROM metal_bands
+    GROUP BY origin
     ORDER BY nb_fans DESC;
-END //
-
-;
