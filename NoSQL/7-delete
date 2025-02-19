@@ -1,4 +1,4 @@
 // deletes all documents with name="Holberton school"
-db.school.insertMany([
+db.school.deleteMany([
     { name: "Holberton school" }
 ])
