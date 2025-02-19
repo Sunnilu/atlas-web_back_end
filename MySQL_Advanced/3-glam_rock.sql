@@ -3,7 +3,7 @@
 SELECT 
     band_name,
     CASE
-        WHEN split is NULL THEN 2025 - formed
+        WHEN split is NULL THEN 2024 - formed
         ELSE split - formed
     END 
     as lifespan
