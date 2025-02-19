@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
-"""MongoDB school database operations module"""
+"""
+Insert a new school document into the collection and return its _id.
+"""
 
-
-import pymongo
+from pymongo import MongoClient
 
 
 def insert_school(mongo_collection, **kwargs):
     """
-    Inserts a new document into a MongoDB collection.
+    Insert a new school document into the collection.
+
+    Args:
+        mongo_collection: The pymongo collection object.
+        **kwargs: The fields and values for the new school document.
+
+    Returns:
+        The _id of the newly inserted school document.
     """
-    data = mongo_collection.insert_one(kwargs)
-    return data.inserted_id
- 
+    result = mongo_collection.insert_one(kwargs)
+    return result.inserted_id
