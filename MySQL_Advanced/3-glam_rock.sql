@@ -2,10 +2,10 @@
 
 SELECT 
     band_name,
-    CASE 
-        WHEN split IS NULL THEN TIMESTAMPDIFF(YEAR, formed, CURRENT_DATE)
-        ELSE TIMESTAMPDIFF(YEAR, formed, split)
-    END as longevity_years
+    CASE
+        WHEN split is NULL THEN YEAR(CURDATE()) - first_album_year
+        ELSE split - first_album_year
+    END as lifespan
 FROM metal_bands
 WHERE style = 'Glam rock'
-ORDER BY longevity_years DESC;
+ORDER BY lifespan DESC;
