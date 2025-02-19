@@ -1,5 +1,5 @@
 -- SQL SafeDiv the first by the second number or returns 0 number is equal to 0.
-
+DELIMITER //
 
 CREATE FUNCTION SafeDivi(a INT, b INT)
 RETURNS FLOAT
@@ -12,4 +12,6 @@ BEGIN
     
     SET result = a / b;
     RETURN result;
-END; 
+END //
+
+DELIMITER ;
