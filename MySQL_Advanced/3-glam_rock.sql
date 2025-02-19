@@ -3,9 +3,10 @@
 SELECT 
     band_name,
     CASE
-        WHEN split is NULL THEN YEAR(CURDATE()) - first_album_year
-        ELSE split - first_album_year
-    END as lifespan
+        WHEN split is NULL THEN 2025 - formed
+        ELSE split - formed
+    END 
+    as lifespan
 FROM metal_bands
-WHERE style = 'Glam rock'
+WHERE style LIKE '%Glam rock%'
 ORDER BY lifespan DESC;
