@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-'''Inserts a new document into a MongoDB collection'''
+"""MongoDB school database operations module.
 
+This module provides functionality for inserting documents into a MongoDB school collection.
+It handles both simple and complex document structures, with proper error handling and
+documentation.
+"""
 
 from pymongo import MongoClient
 import sys
@@ -8,13 +12,21 @@ import sys
 def insert_school(mongo_collection, **kwargs):
     """
     Inserts a new document into a MongoDB collection.
-    
+
     Args:
         mongo_collection: A PyMongo collection object
         **kwargs: Key-value pairs to be inserted as document fields
-    
+
     Returns:
         ObjectId: The _id of the newly inserted document
+
+    Raises:
+        Exception: If any error occurs during insertion
+
+    Examples:
+        >>> collection = MongoClient()['my_db']['school']
+        >>> insert_school(collection, name="Test School", address="123 Main St")
+        ObjectId('...')
     """
     try:
         # Insert the document and get the inserted_id
@@ -24,10 +36,11 @@ def insert_school(mongo_collection, **kwargs):
         return result.inserted_id
     except Exception as e:
         # Log the error and re-raise it
-        print(f"An error occurred: {str(e)}")
+        print(f"An error occurred: {str(e)}", file=sys.stderr)
         raise
 
 def main():
+    """Main function to demonstrate the insert_school functionality."""
     # Create a client and connect to the database
     client = MongoClient('mongodb://127.0.0.1:27017')
     db = client.my_db
