@@ -3,6 +3,9 @@
     "babel-cli": "^6.26.0",
     "babel-node": "^0.0.1-security",
     "babel-preset-env": "^1.7.0",
+    "chai": "^5.2.0",
+    "csv-parser": "^3.0.0",
+    "mocha": "^11.1.0",
     "express": "^4.21.2",
     "nodemon": "^3.1.9"
   },
@@ -24,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/Sunnilu/atlas-web_back_end/issues"
   },
-  "homepage": "https://github.com/Sunnilu/atlas-web_back_end#readme"
+  "homepage": "https://github.com/Sunnilu/atlas-web_back_end#readme",
+  "devDependencies": {
+    "mocha": "^11.1.0"
+  }
 }
