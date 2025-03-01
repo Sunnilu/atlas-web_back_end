@@ -12,8 +12,7 @@
   "main": "index.js",
   {
     "scripts": {
-      "dev": "nodemon --exec babel-node --presets babel-preset-env ./full_server/server.js ./database.csv"
-    }
+      "start": "nodemon --exec babel-node index.js"
   }
   "repository": {
     "type": "git",
