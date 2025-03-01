@@ -33,14 +33,18 @@ const app = http.createServer((req, res) => {
           return;
         }
 
-        // Filter out invalid students (empty lines)
-        const validStudents = output.filter(row => row.length > 1 && row[0].trim() && row[1].trim());
+        // Filter out invalid students (empty lines or invalid rows)
+        const validStudents = output.filter(row => row.length === 2 && row[0].trim() && row[1].trim());
+
+        // Separate students into different categories
+        const studentsInCS = validStudents.filter(student => student[1].trim() === 'CS');
+        const studentsInSWE = validStudents.filter(student => student[1].trim() === 'SWE');
 
         // Build the response body
         let responseText = 'This is the list of our students:\n';
-        validStudents.forEach(student => {
-          responseText += `Name: ${student[0]}, Age: ${student[1]}\n`;
-        });
+        responseText += `Number of students: ${validStudents.length}\n`;
+        responseText += `Number of students in CS: ${studentsInCS.length}. List: ${studentsInCS.map(student => student[0]).join(', ')}\n`;
+        responseText += `Number of students in SWE: ${studentsInSWE.length}. List: ${studentsInSWE.map(student => student[0]).join(', ')}\n`;
 
         // Send the response
         res.statusCode = 200;
