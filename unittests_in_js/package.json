@@ -1,0 +1,16 @@
+{
+  "name": "unittests_in_js",
+  "version": "1.0.0",
+  "main": "0-calcul.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "mocha": "^11.1.0",
+    "save-dev": "^0.0.1-security"
+  }
+}
