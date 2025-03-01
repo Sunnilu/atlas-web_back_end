@@ -1,5 +1,27 @@
 {
   "dependencies": {
-    "express": "^4.21.2"
-  }
+    "babel-cli": "^6.26.0",
+    "babel-node": "^0.0.1-security",
+    "babel-preset-env": "^1.7.0",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
+  },
+  "name": "atlas-web_back_end",
+  "version": "1.0.0",
+  "description": "readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sunnilu/atlas-web_back_end.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sunnilu/atlas-web_back_end/issues"
+  },
+  "homepage": "https://github.com/Sunnilu/atlas-web_back_end#readme"
 }
