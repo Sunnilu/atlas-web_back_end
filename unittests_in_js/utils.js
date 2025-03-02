@@ -1,10 +1,12 @@
 // utils.js
-const utils = {
-    calculateNumber: (type a, b) => {
-        if (type === 'SUM') {
-            return a + b;
-        }
-        // If type is not 'SUM', then it is 'SUBTRACT'
-}
-
-module.exports = utils; 
+function calculateNumber(type, a, b) {
+    // Simulating an expensive calculation
+    if (type === 'SUM') {
+      return a + b;
+    }
+    return 0;
+  }
+  
+  module.exports = {
+    calculateNumber,
+  };
