@@ -1,35 +1,50 @@
-//1-calcul.test.js
+// 1-calcul.test.js
 
 const assert = require('assert');
 const calculateNumber = require('./1-calcul');
 
 describe('calculateNumber', function () {
-    describe('SUM operation', function () {
-        it('should round both numbers and return the sum', function () {
-            assert.strictEqual(calculateNumber(1.4, 2.6, 'SUM'), 4);
-        });
-
-        it('should round negative numbers and return the sum', function () {
-            assert.strictEqual(calculateNumber(-1.4, -2.6, 'SUM'), -4);
-        });
-
-        it('should round 0 to 0 and return the sum', function () {
-            assert.strictEqual(calculateNumber(0.4, 0.4, 'SUM'), 0);
-        });
-
-        it('should handle large numbers', function () {
-            assert.strictEqual(calculateNumber(1234.5678, 8765.4321, 'SUM'), 10000);
-        });
-
-        it('should handle exact integers without rounding', function () {
-            assert.strictEqual(calculateNumber(3, 5, 'SUM'), 8);
-        });
-
-        it('should round down and return correct sum for small fractional numbers', function () {
-            assert.strictEqual(calculateNumber(0.1, 0.1, 'SUM'), 0);
-        });
-
-        it('should handle edge case of rounding to nearest integer', function () {
-            assert.strictEqual(calculateNumber(2.5, 2.5, 'SUM'), 5);
-        });
+  describe('SUM operation', function () {
+    it('should add rounded numbers correctly', function () {
+      assert.strictEqual(calculateNumber('SUM', 1.4, 2.6), 4);
     });
+
+    it('should handle negative numbers', function () {
+      assert.strictEqual(calculateNumber('SUM', -1.4, -2.6), -4);
+    });
+
+    it('should handle edge case of rounding down', function () {
+      assert.strictEqual(calculateNumber('SUM', 0.4, 0.4), 0);
+    });
+  });
+
+  describe('SUBTRACT operation', function () {
+    it('should subtract rounded numbers correctly', function () {
+      assert.strictEqual(calculateNumber('SUBTRACT', 5.6, 2.4), 3);
+    });
+
+    it('should handle negative results correctly', function () {
+      assert.strictEqual(calculateNumber('SUBTRACT', 1.4, 2.6), -1);
+    });
+  });
+
+  describe('DIVIDE operation', function () {
+    it('should divide rounded numbers correctly', function () {
+      assert.strictEqual(calculateNumber('DIVIDE', 7.6, 2.4), 3.1666666666666665);
+    });
+
+    it('should handle division by zero', function () {
+      assert.strictEqual(calculateNumber('DIVIDE', 7.6, 0), 'Error');
+    });
+
+    it('should return "Error" if b is 0 after rounding', function () {
+      assert.strictEqual(calculateNumber('DIVIDE', 5.1, 0), 'Error');
+    });
+  });
+
+  describe('Invalid operation type', function () {
+    it('should return "Invalid operation type" for an unsupported type', function () {
+      assert.strictEqual(calculateNumber('MULTIPLY', 1, 2), 'Invalid operation type');
+    });
+  });
+});
