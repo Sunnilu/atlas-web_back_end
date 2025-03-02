@@ -1,7 +1,7 @@
 {
   "name": "unittests_in_js",
   "version": "1.0.0",
-  "main": "0-calcul.js",
+  "main": "3-payment.test.js",
   "scripts": {
     "test": "mocha 1-calcul.test.js"
   },
