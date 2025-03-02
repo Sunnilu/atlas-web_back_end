@@ -10,7 +10,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "mocha": "^11.1.0",
     "save-dev": "^0.0.1-security",
     "sinon": "^19.0.2"
   },
