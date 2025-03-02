@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "3-payment.test.js",
   "scripts": {
-    "test": "mocha 1-calcul.test.js"
+    "test": "mocha 3-payment.test.js"
   },
   "keywords": [],
   "author": "",
