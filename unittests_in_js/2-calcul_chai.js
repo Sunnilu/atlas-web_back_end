@@ -17,7 +17,6 @@ function add(a, b) {
         expect(result).to.equal(2); // Chai's expect style
       });
     });
-  });
   
   // Export the functions for testing purposes
   module.exports = { add, subtract };
