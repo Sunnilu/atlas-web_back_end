@@ -1,6 +1,6 @@
 //1-calcul.js
 
-function calculateNumber(a, b) {
+function calculateNumber(type,a, b) {
     // round both numbers and return their sum
     const roundedA = Math.round(a);
     const roundedB = Math.round(b);

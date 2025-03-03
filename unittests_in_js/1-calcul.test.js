@@ -20,17 +20,17 @@ describe('calculateNumber', function () {
 
   describe('SUBTRACT operation', function () {
     it('should subtract rounded numbers correctly', function () {
-      assert.strictEqual(calculateNumber('SUBTRACT', 5.6, 2.4), 3);
+      assert.strictEqual(calculateNumber('SUBTRACT', 5.6, 2.4), 4);
     });
 
     it('should handle negative results correctly', function () {
-      assert.strictEqual(calculateNumber('SUBTRACT', 1.4, 2.6), -1);
+      assert.strictEqual(calculateNumber('SUBTRACT', 1.4, 2.6), -2);
     });
   });
 
   describe('DIVIDE operation', function () {
     it('should divide rounded numbers correctly', function () {
-      assert.strictEqual(calculateNumber('DIVIDE', 7.6, 2.4), 3.1666666666666665);
+      assert.strictEqual(calculateNumber('DIVIDE', 7.6, 2.4), 4);
     });
 
     it('should handle division by zero', function () {
