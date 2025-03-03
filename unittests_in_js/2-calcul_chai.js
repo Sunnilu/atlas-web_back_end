@@ -1,23 +1,25 @@
-// Business logic - add and subtract functions
-function add(a, b) {
-    return a + b;
+//1-calcul.js
+
+function calculateNumber(type,a, b) {
+  // round both numbers and return their sum
+  const roundedA = Math.round(a);
+  const roundedB = Math.round(b);
+
+  if (type === 'SUM') {
+      return roundedA + roundedB;
   }
-  
-  function subtract(a, b) {
-    return a - b;
+  else if (type === 'SUBTRACT') {
+      return roundedA - roundedB;
   }
-  
-  // Test suite using Chai's expect for BDD-style tests
-  const { expect } = require('chai');
-  
-  
-    describe('#subtract()', function() {
-      it('should return the difference between two numbers', function() {
-        const result = subtract(5, 3);
-        expect(result).to.equal(2); // Chai's expect style
-      });
-    });
-  
-  // Export the functions for testing purposes
-  module.exports = { add, subtract };
-  
+  else if (type === 'DIVIDE') {
+      if (roundedB === 0) {
+          return 'Error';
+      }
+      return roundedA / roundedB;
+  }
+  else {
+      return 'Invalid operation type'; // in case of a invalid operation type
+  }
+}
+
+module.exports = calculateNumber;
