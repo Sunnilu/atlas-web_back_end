@@ -1,39 +1,38 @@
 // 5-payment.test.js
-
+const sinon = require('sinon');
+const Utils = require('./utils');
 const sendPaymentRequestToAPI = require('./5-payment');
-const consoleSpy = jest.spyOn(console, 'log');
 
-describe('Payment request tests', () => {
- 
-  // Hook to run before each test
-  beforeEach(() => {
-    // Clear previous mock calls
-    consoleSpy.mockClear();
-  });
+describe('sendPaymentRequestToAPI', () => {
+    let consoleSpy;
 
-  // Hook to run after each test
-  afterEach(() => {
-    // Reset any side effects if needed
-    consoleSpy.mockRestore();
-  });
+    beforeEach(() => {
+        // Create a single spy for console.log that will be used across all tests
+        consoleSpy = sinon.spy(console, 'log');
+    });
 
-  it('should log the correct total when sendPaymentRequestToAPI is called with 100 and 20', () => {
-    sendPaymentRequestToAPI(100, 20);
+    afterEach(() => {
+        // Restore the original console.log behavior after each test
+        consoleSpy.restore();
+    });
 
-    // Check if console.log was called once
-    expect(consoleSpy).toHaveBeenCalledTimes(1);
+    it('should log total of 120 when given 100 and 20', () => {
+        sendPaymentRequestToAPI(100, 20);
+        
+        // Verify the exact message was logged
+        sinon.assert.calledWith(consoleSpy, 'The total is: 120');
+        
+        // Verify console.log was called exactly once
+        sinon.assert.calledOnce(consoleSpy);
+    });
 
-    // Check if console.log has the correct message
-    expect(consoleSpy).toHaveBeenCalledWith('The total is: 120');
-  });
-
-  it('should log the correct total when sendPaymentRequestToAPI is called with 10 and 10', () => {
-    sendPaymentRequestToAPI(10, 10);
-
-    // Check if console.log was called once
-    expect(consoleSpy).toHaveBeenCalledTimes(1);
-
-    // Check if console.log has the correct message
-    expect(consoleSpy).toHaveBeenCalledWith('The total is: 20');
-  });
+    it('should log total of 20 when given 10 and 10', () => {
+        sendPaymentRequestToAPI(10, 10);
+        
+        // Verify the exact message was logged
+        sinon.assert.calledWith(consoleSpy, 'The total is: 20');
+        
+        // Verify console.log was called exactly once
+        sinon.assert.calledOnce(consoleSpy);
+    });
 });
