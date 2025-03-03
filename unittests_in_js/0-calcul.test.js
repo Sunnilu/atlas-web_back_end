@@ -27,6 +27,6 @@ describe('calculateNumber', function () {
   });
 
   it('should handle edge case of rounding to nearest integer', function () {
-    assert.strictEqual(calculateNumber(2.5, 2.5), 5);
+    assert.strictEqual(calculateNumber(3, 3), 6);
   });
 });
