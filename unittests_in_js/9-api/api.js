@@ -16,9 +16,7 @@ app.get('/cart/:id', (req, res) => {
     }
     
     // Return payment methods for valid cart ID
-    const paymentMethods = {
-        methods: ['Credit Card', 'PayPal', 'Bank Transfer']
-    };
+    const paymentMethods = `Payment methods for cart ${id}`;
     res.json(paymentMethods);
 });
 
