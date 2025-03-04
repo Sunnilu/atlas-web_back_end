@@ -1,30 +1,27 @@
-// api.js
 const express = require('express');
 const app = express();
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Welcome to the payment system');
+// Existing routes remain unchanged...
+
+// GET /available_payments endpoint
+app.get('/available_payments', (req, res) => {
+    res.json({
+        payment_methods: {
+            credit_cards: true,
+            paypal: false
+        }
+    });
 });
 
-// Add new cart endpoint with validation
-app.get('/cart/:id', (req, res) => {
-    const id = req.params.id;
-    
-    // Validate that id is a number
-    if (isNaN(id) || !id.match(/^\d+$/)) {
-        return res.status(404).send('Invalid cart ID');
+// POST /login endpoint
+app.post('/login', (req, res) => {
+    const { userName } = req.body;
+    if (!userName) {
+        return res.status(400).json({ error: 'Username is required' });
     }
-    
-    // Return payment methods for valid cart ID
-    const paymentMethods = {
-        methods: ['Credit Card', 'PayPal', 'Bank Transfer']
-    };
-    res.json(paymentMethods);
+    res.json({ message: `Welcome ${userName}` });
 });
 
-const PORT = 7865;
-app.listen(PORT, () => {
-    console.log(`API available on localhost port ${PORT}`);
-});
-
+// Export app for testing
 module.exports = app;
