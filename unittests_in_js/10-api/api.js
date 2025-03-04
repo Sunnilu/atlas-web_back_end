@@ -24,7 +24,7 @@ app.get('/available_payments', (req, res) => {
 
 // POST /login endpoint
 app.post('/login', (req, res) => {
-    const userName = req.body;
+    const userName = req.body.userName;
     if (!userName) {
         return res.status(400).json({ error: 'Username is required' });
     }
