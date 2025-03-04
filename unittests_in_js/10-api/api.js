@@ -1,21 +1,25 @@
 const express = require('express');
 const app = express();
-app.use(express.json());
+const router = express.Router();
 
-// Existing routes remain unchanged...
+app.use(express.json());
+app.use('/', router);
+
+// Helper function for payment methods response
+const getPaymentMethods = () => ({
+    payment_methods: {
+        credit_cards: true,
+        paypal: false
+    }
+});
 
 // GET /available_payments endpoint
-app.get('/available_payments', (req, res) => {
-    res.json({
-        payment_methods: {
-            credit_cards: true,
-            paypal: false
-        }
-    });
+router.get('/available_payments', (req, res) => {
+    res.json(getPaymentMethods());
 });
 
 // POST /login endpoint
-app.post('/login', (req, res) => {
+router.post('/login', (req, res) => {
     const { userName } = req.body;
     if (!userName) {
         return res.status(400).json({ error: 'Username is required' });
@@ -23,5 +27,19 @@ app.post('/login', (req, res) => {
     res.json({ message: `Welcome ${userName}` });
 });
 
+// GET /cart/:id endpoint
+router.get('/cart/:id', (req, res) => {
+    const id = req.params.id;
+    
+    // Validate that id is a number
+    if (isNaN(id) || !id.match(/^\d+$/)) {
+        return res.status(404).send('Invalid cart ID');
+    }
+    
+    // Return payment methods for valid cart ID
+    const paymentMethods = `Payment methods for cart ${id}`;
+    res.send(paymentMethods);
+});
+
 // Export app for testing
-module.exports = app;
+module.exports = router;

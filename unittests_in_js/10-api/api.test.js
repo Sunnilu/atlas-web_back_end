@@ -1,45 +1,53 @@
-const request = require('supertest');
+const request = require('request');
 const app = require('./api');
 
 describe('API Endpoints', () => {
-    // Existing tests remain unchanged...
-
+    // Available Payments Tests
     describe('GET /available_payments', () => {
-        it('should return available payment methods', async () => {
-            const response = await request(app)
-                .get('/available_payments')
-                .expect('Content-Type', /json/)
-                .expect(200);
-
-            expect(response.body).toHaveProperty('payment_methods');
-            expect(response.body.payment_methods).toEqual({
-                credit_cards: true,
-                paypal: false
-            });
+        it('should return payment methods', (done) => {
+            request.get('http://localhost:3000/available_payments', 
+                { json: true }, 
+                (error, response, body) => {
+                    expect(response.statusCode).toBe(200);
+                    expect(body).toHaveProperty('payment_methods');
+                    expect(body.payment_methods).toEqual({
+                        credit_cards: true,
+                        paypal: false
+                    });
+                    done();
+                }
+            );
         });
     });
 
+    // Login Tests
     describe('POST /login', () => {
-        it('should return welcome message with valid username', async () => {
-            const response = await request(app)
-                .post('/login')
-                .send({ userName: 'testUser' })
-                .expect('Content-Type', /json/)
-                .expect(200);
-
-            expect(response.body).toHaveProperty('message');
-            expect(response.body.message).toBe('Welcome testUser');
+        it('should return welcome message with valid username', (done) => {
+            request.post({
+                url: 'http://localhost:3000/login',
+                json: true,
+                body: { userName: 'testUser' }
+            }, 
+            (error, response, body) => {
+                expect(response.statusCode).toBe(200);
+                expect(body).toHaveProperty('message');
+                expect(body.message).toBe('Welcome testUser');
+                done();
+            });
         });
 
-        it('should return error for missing username', async () => {
-            const response = await request(app)
-                .post('/login')
-                .send({})
-                .expect('Content-Type', /json/)
-                .expect(400);
-
-            expect(response.body).toHaveProperty('error');
-            expect(response.body.error).toBe('Username is required');
+        it('should return error for missing username', (done) => {
+            request.post({
+                url: 'http://localhost:3000/login',
+                json: true,
+                body: {}
+            }, 
+            (error, response, body) => {
+                expect(response.statusCode).toBe(400);
+                expect(body).toHaveProperty('error');
+                expect(body.error).toBe('Username is required');
+                done();
+            });
         });
     });
 });
