@@ -1,6 +1,6 @@
 // api.test.js
 const request = require('supertest');
-const app = require('./api');
+const app = require('./8-api/api');
 
 describe('index page', () => {
     it('should return correct status code', (done) => {
