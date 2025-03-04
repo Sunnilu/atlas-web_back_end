@@ -17,7 +17,7 @@ app.get('/cart/:id', (req, res) => {
     
     // Return payment methods for valid cart ID
     const paymentMethods = `Payment methods for cart ${id}`;
-    res.json(paymentMethods);
+    res.send(paymentMethods);
 });
 
 const PORT = 7865;
