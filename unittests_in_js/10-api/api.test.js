@@ -5,17 +5,30 @@ const expect = chai.expect;
 
 describe('API Endpoints', () => {
     // Available Payments Tests
+    describe('GET /', () => {
+        it('should return payment methods', (done) => {
+            request.get('http://localhost:7865/', 
+                { json: true }, 
+                (error, response, body) => {
+                    expect(response.statusCode).to.equal(200);
+                    expect(body).to.equal('Welcome to the payment system'); 
+                    done();
+                }
+            );
+        });
+    });
+    
     describe('GET /available_payments', () => {
         it('should return payment methods', (done) => {
             request.get('http://localhost:7865/available_payments', 
                 { json: true }, 
                 (error, response, body) => {
                     expect(response.statusCode).to.equal(200);
-                    // expect(body).toHaveProperty('payment_methods');
-                    // expect(body.payment_methods).toEqual({
-                    //     credit_cards: true,
-                    //     paypal: false
-                    // });
+                    expect(body).toHaveProperty('payment_methods');
+                    expect(body.payment_methods).toEqual({
+                        credit_cards: true,
+                        paypal: false
+                    });
                     done();
                 }
             );
