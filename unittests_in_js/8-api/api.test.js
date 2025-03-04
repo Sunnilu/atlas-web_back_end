@@ -1,6 +1,7 @@
 // api.test.js
-const request = require('supertest');
-const app = require('./api');
+const request = require('request');
+const chai = require('chai');
+const expect = chai.expect
 
 describe('cart page', () => {
     it('should return correct status code when id is a number', (done) => {
