@@ -3,7 +3,11 @@ const app = express();
 const router = express.Router();
 
 app.use(express.json());
-app.use('/', router);
+// app.use('/', router);
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the payment system');
+});
 
 // Helper function for payment methods response
 const getPaymentMethods = () => ({
