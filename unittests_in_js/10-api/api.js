@@ -10,21 +10,21 @@ app.get('/', (req, res) => {
 });
 
 // Helper function for payment methods response
-const getPaymentMethods = () => ({
-    payment_methods: {
+const paymentMethods = {
+    payment_methods : {
         credit_cards: true,
         paypal: false
     }
-});
+};
 
 // GET /available_payments endpoint
 app.get('/available_payments', (req, res) => {
-    res.json(getPaymentMethods());
+    res.json(paymentMethods);
 });
 
 // POST /login endpoint
 app.post('/login', (req, res) => {
-    const { userName } = req.body;
+    const userName = req.body;
     if (!userName) {
         return res.status(400).json({ error: 'Username is required' });
     }
