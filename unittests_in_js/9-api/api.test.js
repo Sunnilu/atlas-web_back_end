@@ -1,11 +1,11 @@
 // api.test.js
 const request = require('supertest');
-const app = require('./8-api/api');
+const app = require('./api');
 
-describe('index page', () => {
-    it('should return correct status code', (done) => {
+describe('cart page', () => {
+    it('should return correct status code when id is a number', (done) => {
         request(app)
-            .get('/')
+            .get('/cart/123')
             .expect(200)
             .end((err, res) => {
                 if (err) return done(err);
@@ -13,20 +13,34 @@ describe('index page', () => {
             });
     });
 
-    it('should return correct message', (done) => {
+    it('should return 404 when id is not a number', (done) => {
         request(app)
-            .get('/')
-            .expect('Welcome to the payment system')
+            .get('/cart/abc')
+            .expect(404)
             .end((err, res) => {
                 if (err) return done(err);
                 done();
             });
     });
 
-    it('should return correct content type', (done) => {
+    it('should return correct payment methods when id is valid', (done) => {
         request(app)
-            .get('/')
-            .expect('Content-Type', /text\/html/)
+            .get('/cart/123')
+            .expect(200)
+            .expect({
+                methods: ['Credit Card', 'PayPal', 'Bank Transfer']
+            })
+            .end((err, res) => {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('should return error message when id is invalid', (done) => {
+        request(app)
+            .get('/cart/abc')
+            .expect(404)
+            .expect('Invalid cart ID')
             .end((err, res) => {
                 if (err) return done(err);
                 done();
