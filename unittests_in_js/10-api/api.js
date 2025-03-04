@@ -41,5 +41,10 @@ router.get('/cart/:id', (req, res) => {
     res.send(paymentMethods);
 });
 
+const PORT = 7865;
+app.listen(PORT, () => {
+    console.log(`API available on localhost port ${PORT}`);
+});
+
 // Export app for testing
-module.exports = router;
+module.exports = app;
