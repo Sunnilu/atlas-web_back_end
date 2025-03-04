@@ -15,6 +15,12 @@ describe("Index page", function () {
       done();
     });
   });
+  it("should return the correct content", function (done) {
+    request(url + 'cart/124', function (error, response, body) {
+      expect(body).to.equal("Payment methods for cart 124");
+      done();
+    });
+  });
   it("should return status 200", function (done) {
     request(url, function (error, response, body) {
       expect(response.statusCode).to.equal(200);
