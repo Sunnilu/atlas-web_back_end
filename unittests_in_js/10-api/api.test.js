@@ -63,8 +63,11 @@ describe("API Endpoints", () => {
   describe("/login endpoint", () => {
     it("should welcome the user", (done) => {
       request.post(
-        { url: `http://localhost:7865/login`, json: { userName: "Betty" } },
+        { url: `http://localhost:7865/login`, json: { "userName": "Betty" } },
         (error, response, body) => {
+          if(error) {
+            console.log(error);
+          }
           expect(response.statusCode).to.equal(200);
           expect(body).to.equal("Welcome Betty");
           done();
