@@ -71,7 +71,7 @@ describe("API Endpoints", () => {
           if(error) {
             console.log(error);
           }
-          // expect(response.statusCode).to.equal(200);
+          expect(response.statusCode).to.equal(200);
           expect(body.message).to.equal("Welcome Betty");
           done();
         }

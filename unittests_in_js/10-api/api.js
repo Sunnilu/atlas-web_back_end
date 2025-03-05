@@ -2,8 +2,9 @@ const express = require('express');
 const app = express();
 // const router = express.Router();
 
-// app.use(express.json());
+app.use(express.json());
 // app.use('/', router);
+// const bodyParser = require('body-parser');
 
 app.get('/', (req, res) => {
     res.send('Welcome to the payment system');
@@ -24,10 +25,12 @@ app.get('/available_payments', (req, res) => {
 
 // POST /login endpoint
 app.post('/login', (req, res) => {
-    const {userName} = req.body;
+    const userName = req.body.userName;
+    console.log(typeof(userName));
     if (!userName) {
         return res.status(400).json({ error: 'Username is required' });
     }
+
     res.status(200).send({ message: `Welcome ${userName}` });
 });
 
