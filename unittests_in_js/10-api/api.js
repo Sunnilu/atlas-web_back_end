@@ -28,7 +28,7 @@ app.post('/login', (req, res) => {
     if (!userName) {
         return res.status(400).json({ error: 'Username is required' });
     }
-    res.json({ message: `Welcome ${userName}` });
+    res.status(200).send({ message: `Welcome ${userName}` });
 });
 
 // GET /cart/:id endpoint
