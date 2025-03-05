@@ -20,7 +20,7 @@ const paymentMethods = {
 
 // GET /available_payments endpoint
 app.get('/available_payments', (req, res) => {
-    res.json(paymentMethods);
+    res.send(paymentMethods);
 });
 
 // POST /login endpoint

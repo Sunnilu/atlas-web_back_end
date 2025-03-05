@@ -50,7 +50,7 @@ describe("API Endpoints", () => {
         (error, response, body) => {
           expect(response.statusCode).to.equal(200);
           // expect(body).toHaveProperty("payment_methods");
-          expect(body.payment_methods).to.equal({
+          expect(body.payment_methods).to.deep.equal({
             credit_cards: true,
             paypal: false,
           });
