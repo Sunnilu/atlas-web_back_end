@@ -11,9 +11,3 @@ const list = [
     }
 ];
 createPushNotificationsJobs(list, queue);
-
-bob@dylan:~$
-bob@dylan:~$ npm run dev 8-job-main.js 
-
-> queuing_system_in_js@1.0.0 dev /root
-> nodemon --exec babel-node --presets @babel/preset-env "8-job-main.js"
