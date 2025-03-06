@@ -51,4 +51,31 @@ describe('createPushNotificationsJobs', () => {
     const job = queue.testMode.jobs[0];
     assert.deepStrictEqual(job.data, jobs[0]);
   });
+
+  it('should handle multiple jobs with different data', () => {
+    const jobs = [
+      { phoneNumber: '4153518780', message: 'Test message 1' },
+      { phoneNumber: '4153518781', message: 'Test message 2' },
+      { phoneNumber: '4153518782', message: 'Test message 3' }
+    ];
+
+    createPushNotificationsJobs(jobs, queue);
+
+    assert.strictEqual(queue.testMode.jobs.length, 3);
+    jobs.forEach((jobData, index) => {
+      const job = queue.testMode.jobs[index];
+      assert.deepStrictEqual(job.data, jobData);
+      assert.strictEqual(job.type, 'push_notification_code_3');
+    });
+  });
+
+  it('should handle jobs with missing required fields', () => {
+    const jobs = [
+      { message: 'Test message 1' }, // Missing phoneNumber
+      { phoneNumber: '4153518780' }  // Missing message
+    ];
+
+    assert.throws(() => createPushNotificationsJobs(jobs, queue),
+      Error, 'Missing required fields');
+  });
 });
