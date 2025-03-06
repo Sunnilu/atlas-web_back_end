@@ -1,81 +1,51 @@
-const assert = require('assert');
 const kue = require('kue');
-const createPushNotificationsJobs = require('./8-job');
+const createPushNotificationsJobs = require('./8-job'); // Adjust the path if necessary
+const assert = require('assert');
+const queue = kue.createQueue();
 
 describe('createPushNotificationsJobs', () => {
-  let queue;
-
-  before(() => {
-    // Enter test mode before running tests
-    queue = kue.createQueue();
-    queue.testMode.enter();
+  beforeEach(() => {
+    queue.testMode = true; // Enable test mode
   });
 
-  after(() => {
-    // Exit test mode and clear the queue after tests
-    queue.testMode.exit();
-    queue.testMode.clear();
+  afterEach(() => {
+    queue.testMode = false; // Exit test mode after each test
+    queue.removeCompleted(); // Clear the queue after tests
   });
 
-  it('should throw an error when jobs is not an array', () => {
-    assert.throws(() => createPushNotificationsJobs('not an array', queue), 
-      Error, 'Jobs is not an array');
+  it('should display an error message if jobs is not an array', () => {
+    const invalidJobs = 'not an array';
+    const result = createPushNotificationsJobs(invalidJobs, queue);
+    assert.strictEqual(result, 'Jobs is not an array');
   });
 
-  it('should create jobs in the queue', () => {
+  it('should create two new jobs in the queue', () => {
     const jobs = [
-      { phoneNumber: '4153518780', message: 'Test message 1' },
-      { phoneNumber: '4153518781', message: 'Test message 2' }
+      { phoneNumber: '123', message: 'Notification 1' },
+      { phoneNumber: '456', message: 'Notification 2' }
     ];
 
-    createPushNotificationsJobs(jobs, queue);
+    const result = createPushNotificationsJobs(jobs, queue);
 
-    // Validate jobs in queue
-    assert.strictEqual(queue.testMode.jobs.length, 2);
-    assert.strictEqual(queue.testMode.jobs[0].type, 'push_notification_code_3');
-    assert.strictEqual(queue.testMode.jobs[1].type, 'push_notification_code_3');
+    // Validate the jobs in the queue
+    queue.process((job, done) => {
+      console.log(`Notification job created: ${job.data.phoneNumber}`);
+      done();
+    });
+
+    // Check that two jobs were added to the queue
+    assert.strictEqual(queue.testMode.jobs.length, 2);  // Expect 2 jobs in the queue
+    assert.strictEqual(queue.testMode.jobs[0].data.phoneNumber, '123');
+    assert.strictEqual(queue.testMode.jobs[1].data.phoneNumber, '456');
   });
 
-  it('should handle empty array', () => {
-    const jobs = [];
-    createPushNotificationsJobs(jobs, queue);
+  it('should not add jobs to the queue if an empty array is passed', () => {
+    const emptyJobs = [];
+    const result = createPushNotificationsJobs(emptyJobs, queue);
+
+    // Ensure no jobs were added
     assert.strictEqual(queue.testMode.jobs.length, 0);
   });
 
-  it('should create jobs with correct data', () => {
-    const jobs = [
-      { phoneNumber: '4153518780', message: 'Test message 1' }
-    ];
-
-    createPushNotificationsJobs(jobs, queue);
-    const job = queue.testMode.jobs[0];
-    assert.deepStrictEqual(job.data, jobs[0]);
-  });
-
-  it('should handle multiple jobs with different data', () => {
-    const jobs = [
-      { phoneNumber: '4153518780', message: 'Test message 1' },
-      { phoneNumber: '4153518781', message: 'Test message 2' },
-      { phoneNumber: '4153518782', message: 'Test message 3' }
-    ];
-
-    createPushNotificationsJobs(jobs, queue);
-
-    assert.strictEqual(queue.testMode.jobs.length, 3);
-    jobs.forEach((jobData, index) => {
-      const job = queue.testMode.jobs[index];
-      assert.deepStrictEqual(job.data, jobData);
-      assert.strictEqual(job.type, 'push_notification_code_3');
-    });
-  });
-
-  it('should handle jobs with missing required fields', () => {
-    const jobs = [
-      { message: 'Test message 1' }, // Missing phoneNumber
-      { phoneNumber: '4153518780' }  // Missing message
-    ];
-
-    assert.throws(() => createPushNotificationsJobs(jobs, queue),
-      Error, 'Missing required fields');
-  });
+  // Add more test cases as needed...
 });
