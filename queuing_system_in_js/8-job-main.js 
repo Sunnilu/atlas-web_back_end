@@ -1,4 +1,5 @@
 import kue from 'kue';
+
 import createPushNotificationsJobs from './8-job.js';
 
 const queue = kue.createQueue();
@@ -6,16 +7,13 @@ const queue = kue.createQueue();
 const list = [
     {
         phoneNumber: '4153518780',
-        message: 'This is the code 1234 to verify your account',
-    },
-    {
-        phoneNumber: '4153518781',
-        message: 'This is the code 5678 to verify your account',
-    },
-    {
-        phoneNumber: '4153518782',
-        message: 'This is the code 9012 to verify your account',
+    message: 'This is the code 1234 to verify your account'
     }
 ];
-
 createPushNotificationsJobs(list, queue);
+
+bob@dylan:~$
+bob@dylan:~$ npm run dev 8-job-main.js 
+
+> queuing_system_in_js@1.0.0 dev /root
+> nodemon --exec babel-node --presets @babel/preset-env "8-job-main.js"
