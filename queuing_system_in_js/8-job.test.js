@@ -5,18 +5,18 @@ const queue = kue.createQueue();
 
 describe('createPushNotificationsJobs', () => {
   beforeEach(() => {
-    queue.testMode = true; // Enable test mode
+    queue.testMode = true; // Enable test mode to prevent job processing
   });
 
   afterEach(() => {
     queue.testMode = false; // Exit test mode after each test
-    queue.removeCompleted(); // Clear the queue after tests
+    queue.removeJobs(['push_notification_code_3']); // Clear the specific job type from the queue
   });
 
   it('should display an error message if jobs is not an array', () => {
-    const invalidJobs = 'not an array';
-    const result = createPushNotificationsJobs(invalidJobs, queue);
-    assert.strictEqual(result, 'Jobs is not an array');
+    const invalidJobs = 'not an array'; // Passing a string instead of an array
+    const result = createPushNotificationsJobs(invalidJobs, queue); // Call the function
+    assert.strictEqual(result, 'Jobs is not an array'); // Assert the error message
   });
 
   it('should create two new jobs in the queue', () => {
@@ -25,27 +25,33 @@ describe('createPushNotificationsJobs', () => {
       { phoneNumber: '456', message: 'Notification 2' }
     ];
 
-    const result = createPushNotificationsJobs(jobs, queue);
+    const result = createPushNotificationsJobs(jobs, queue); // Call the function to add jobs
 
     // Validate the jobs in the queue
-    queue.process((job, done) => {
+    queue.process('push_notification_code_3', (job, done) => {
       console.log(`Notification job created: ${job.data.phoneNumber}`);
       done();
     });
 
-    // Check that two jobs were added to the queue
-    assert.strictEqual(queue.testMode.jobs.length, 2);  // Expect 2 jobs in the queue
-    assert.strictEqual(queue.testMode.jobs[0].data.phoneNumber, '123');
-    assert.strictEqual(queue.testMode.jobs[1].data.phoneNumber, '456');
+    // Ensure two jobs are in the queue
+    assert.strictEqual(queue.testMode.jobs.length, 2); // Check the number of jobs in the queue
+    assert.strictEqual(queue.testMode.jobs[0].data.phoneNumber, '123'); // First job's phone number
+    assert.strictEqual(queue.testMode.jobs[1].data.phoneNumber, '456'); // Second job's phone number
   });
 
   it('should not add jobs to the queue if an empty array is passed', () => {
-    const emptyJobs = [];
-    const result = createPushNotificationsJobs(emptyJobs, queue);
+    const emptyJobs = []; // Passing an empty array
+    const result = createPushNotificationsJobs(emptyJobs, queue); // Call the function with empty array
 
-    // Ensure no jobs were added
-    assert.strictEqual(queue.testMode.jobs.length, 0);
+    // Ensure no jobs were added to the queue
+    assert.strictEqual(queue.testMode.jobs.length, 0); // No jobs should be in the queue
   });
 
-  // Add more test cases as needed...
+  it('should not add jobs to the queue if jobs is not an array', () => {
+    const invalidJobs = 'not an array'; // Invalid input
+    const result = createPushNotificationsJobs(invalidJobs, queue); // Call the function with invalid input
+
+    // Ensure no jobs were added to the queue
+    assert.strictEqual(queue.testMode.jobs.length, 0); // No jobs should be added
+  });
 });
