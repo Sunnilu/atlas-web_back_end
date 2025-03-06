@@ -21,4 +21,4 @@ client.on('connect', function() {
         console.log('\nStored hash values:');
         console.log(reply);
     });
-});
+}); 

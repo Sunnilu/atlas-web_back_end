@@ -5,6 +5,7 @@ client.on('connect', function() {
     console.log('Connected to Redis!');
 });
 
+
 function setNewSchool(schoolName, value) {
     client.set(schoolName, value, redis.print);
 }
