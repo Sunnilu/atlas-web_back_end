@@ -1,47 +1,44 @@
-const kue = require('kue');
+import kue from 'kue';
 
-function createPushNotificationsJobs(jobs, queue) {
-  // Validate that jobs is an array
+export default function createPushNotificationsJobs(jobs, queue) {
+  // Validate input
   if (!Array.isArray(jobs)) {
     throw new Error('Jobs is not an array');
   }
 
-  // Create a queue if none was provided
-  if (!queue) {
-    queue = kue.createQueue();
+  // Handle empty array case
+  if (jobs.length === 0) {
+    return;
   }
 
-  // Process each job in the array
-  jobs.forEach((jobData) => {
-    // Create a new job in the queue
-    const job = queue.create('push_notification_code_3', jobData)
-      .save((err) => {
-        if (err) {
-          console.error('Error creating job:', err);
-          return;
-        }
-        console.log(`Notification job created: ${job.id}`);
-      });
+  // Create jobs for each item in the array
+  jobs.forEach(job => {
+    const kueJob = queue.create('push_notification_code_3', job)
+      .removeOnComplete(true);
+
+    // Log job creation
+    console.log(`Notification job created: ${kueJob.id}`);
 
     // Handle job completion
-    job.on('complete', () => {
-      console.log(`Notification job ${job.id} completed`);
+    kueJob.on('complete', () => {
+      console.log(`Notification job ${kueJob.id} completed`);
     });
 
     // Handle job failure
-    job.on('failed', (errorMessage) => {
-      console.log(`Notification job ${job.id} failed: ${errorMessage}`);
+    kueJob.on('failed', (errorMessage) => {
+      console.log(`Notification job ${kueJob.id} failed: ${errorMessage}`);
     });
 
     // Handle job progress
-    job.on('progress', (progress) => {
-      console.log(`Notification job ${job.id} ${progress}% complete`);
+    kueJob.on('progress', (progress) => {
+      console.log(`Notification job ${kueJob.id} ${progress}% complete`);
+    });
+
+    // Force save to ensure job is persisted
+    kueJob.save(err => {
+      if (err) {
+        console.error(`Error saving job ${kueJob.id}: ${err.message}`);
+      }
     });
   });
-
-  // Return the queue for chaining
-  return queue;
 }
-
-// Export the function
-module.exports = createPushNotificationsJobs;
