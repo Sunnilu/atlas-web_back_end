@@ -29,7 +29,7 @@ class MRUCache(BaseCaching):
             print(f"DISCARD: {discard_key}")
 
     def get(self, key):
-        """Retrieve an item from the cache by key, updating its recent usage."""
+        """Retrieve an item from cache by key, updating its recent usage."""
         if key in self.cache_data:
             self.keys_order.remove(key)
             self.keys_order.append(key)
