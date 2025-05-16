@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module to paginate a database of popular baby names with hypermedia support."""
+"""Module to paginate a database of popular baby names hypermedia support."""
 
 import csv
 import math
