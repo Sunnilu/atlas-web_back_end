@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
+"""Module to paginate a database of popular baby names."""
 import csv
-from typing import List
+from typing import List, Tuple
 
 
-def index_range(page: int, page_size: int) -> tuple:
-    """
-    Calculate the start and end indices for pagination.
+def index_range(page: int, page_size: int) -> Tuple[int, int]:
+    """Calculate start and end indices for pagination.
 
     Args:
         page (int): The current page number (1-indexed).
         page_size (int): The number of items per page.
 
     Returns:
-        tuple: A tuple containing the start index and end index for the items
-               to display on the given page.
+        tuple: A tuple containing the start and end indices for items
+               on the given page.
 
     Examples:
         >>> index_range(1, 10)
@@ -23,7 +23,7 @@ def index_range(page: int, page_size: int) -> tuple:
     """
     start_index = (page - 1) * page_size
     end_index = start_index + page_size
-    return (start_index, end_index)
+    return start_index, end_index
 
 
 class Server:
@@ -34,32 +34,37 @@ class Server:
     def __init__(self):
         self.__dataset = None
 
-    def dataset(self) -> List[List]:
-        """Cached dataset."""
+    def dataset(self) -> List[List[str]]:
+        """Cached dataset.
+
+        Returns:
+            List[List[str]]: The cached dataset as a list of lists.
+        """
         if self.__dataset is None:
-            with open(self.DATA_FILE) as f:
+            with open(self.DATA_FILE, encoding='utf-8') as f:
                 reader = csv.reader(f)
                 dataset = [row for row in reader]
             self.__dataset = dataset[1:]
 
         return self.__dataset
 
-    def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """
-        Return the correct page of the dataset.
+    def get_page(self, page: int = 1, page_size: int = 10) -> List[List[str]]:
+        """Get a specific page from the dataset.
 
         Args:
-            page (int): Page number (default is 1).
-            page_size (int): Number of items per page (default is 10).
+            page (int, optional): Page number. Defaults to 1.
+            page_size (int, optional): Items per page. Defaults to 10.
 
         Returns:
-            List[List]: List of rows corresponding to the requested page.
+            List[List[str]]: Rows corresponding to the requested page.
 
         Raises:
-            AssertionError: If page or page_size is not greater than 0.
+            AssertionError: If page or page_size are not positive integers.
         """
-        assert isinstance(page, int) and page > 0, "integer greater than 0"
-        assert isinstance(page_size, int) and page_size > 0, "page_size must integer greater than 0"
+        assert isinstance(page, int) and page > 0, \
+            "page must be an integer greater than 0"
+        assert isinstance(page_size, int) and page_size > 0, \
+            "page_size must be an integer greater than 0"
 
         start_index, end_index = index_range(page, page_size)
         dataset = self.dataset()
