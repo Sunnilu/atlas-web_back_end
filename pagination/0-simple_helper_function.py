@@ -5,6 +5,7 @@ This module provides a utility function `index_range`
 used to determine the start and end index for paginated data.
 """
 
+
 def index_range(page: int, page_size: int) -> tuple:
     """
     Return the start and end index for pagination.
