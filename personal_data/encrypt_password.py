@@ -1,26 +1,18 @@
 #!/usr/bin/env python3
-'''Encrypting passwords and validating the password'''
-
+"""
+Encrypt password module
+"""
 
 import bcrypt
 
-def is_valid(hashed_password: bytes, password: str) -> bool:
+def hash_password(password: str) -> bytes:
     """
-    Validates a password by comparing it against a stored hashed password.
-    
-    This function takes a password and compares it against a pre-hashed password using bcrypt's checkpw function.
-    If the password matches the hashed version, it returns True, otherwise False.
+    Hashes a password using bcrypt with a randomly generated salt.
     
     Args:
-        hashed_password (bytes): The hashed password stored in the database.
-        password (str): The plain-text password to check against the hashed password.
-    
+        password (str): The password to hash.
+
     Returns:
-        bool: True if the password matches the hashed password, False otherwise.
-    
-    Example:
-        is_valid(hashed_pw, "my_secure_password")
+        bytes: The salted, hashed password.
     """
-    
-    # Use bcrypt to check if the provided password matches the hashed password
-    return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
