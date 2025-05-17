@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module to paginate a database of popular baby names hypermedia support."""
+"""Module to paginate a database of popular baby names with hypermedia support."""
 
 import csv
 import math
@@ -77,7 +77,11 @@ class Server:
 
         return dataset[start_index:end_index]
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict[str, Optional[int]]:
+    def get_hyper(
+        self,
+        page: int = 1,
+        page_size: int = 10
+    ) -> Dict[str, Optional[int]]:
         """Provide pagination details in a dictionary (hypermedia format).
 
         Args:
@@ -105,4 +109,3 @@ class Server:
             "prev_page": page - 1 if page > 1 else None,
             "total_pages": total_pages
         }
-
