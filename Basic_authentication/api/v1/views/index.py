@@ -7,20 +7,21 @@ from api.v1.views import app_views
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status() -> str:
-    """ GET /api/v1/status
-    Return:
-      - the status of the API
-    """
+    """ GET /api/v1/status """
     return jsonify({"status": "OK"})
 
 
 @app_views.route('/stats/', strict_slashes=False)
 def stats() -> str:
-    """ GET /api/v1/stats
-    Return:
-      - the number of each objects
-    """
+    """ GET /api/v1/stats """
     from models.user import User
     stats = {}
     stats['users'] = User.count()
     return jsonify(stats)
+
+# ✅ New test route for 401
+@app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
+def unauthorized_route():
+    """ GET /api/v1/unauthorized """
+    abort(401)
+
