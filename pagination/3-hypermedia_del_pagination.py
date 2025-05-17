@@ -54,8 +54,7 @@ class Server:
         Returns:
             Dict[str, Any]: Dictionary with page data and metadata.
         """
-        assert isinstance(index, int) and index >= 0,
-            "Index must be a non-negative integer"
+        assert isinstance(index, int) and index >= 0, "Index must be a non-negative integer"
 
         indexed_data = self.indexed_dataset()
         dataset_size = len(indexed_data)
