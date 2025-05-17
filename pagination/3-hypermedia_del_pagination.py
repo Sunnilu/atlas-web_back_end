@@ -44,7 +44,8 @@ class Server:
 
         return self.__indexed_dataset
 
-    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict[str, Any]:
+    def get_hyper_index(self, index: int = None,
+                        page_size: int = 10) -> Dict[str, Any]:
         """Return a page of the dataset with deletion-resilience.
 
         Args:
@@ -54,11 +55,13 @@ class Server:
         Returns:
             Dict[str, Any]: Dictionary with page data and metadata.
         """
-        assert isinstance(index, int) and index >= 0, "Index must be a non-negative integer"
+        assert isinstance(index, int) and index >= 0, \
+            "Index must be a non-negative integer"
 
         indexed_data = self.indexed_dataset()
         dataset_size = len(indexed_data)
-        assert index < dataset_size, "Index out of range"
+        assert index < dataset_size, \
+            "Index out of range"
 
         data = []
         current_index = index
