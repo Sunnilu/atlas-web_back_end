@@ -26,10 +26,7 @@ elif auth_type == "auth":
 
 @app.before_request
 def before_request():
-    """
-    Hook that runs before each request to handle authentication.
-    Sets request.current_user if authentication is successful.
-    """
+    """ Run before each request to enforce auth. """
     if auth is None:
         return
 
@@ -37,7 +34,7 @@ def before_request():
         '/api/v1/status/',
         '/api/v1/unauthorized/',
         '/api/v1/forbidden/',
-        '/api/v1/users/me',
+        '/api/v1/users/me'
     ]
 
     if not auth.require_auth(request.path, excluded_paths):
@@ -51,6 +48,7 @@ def before_request():
         abort(403)
 
     request.current_user = user
+
 
 
 @app.errorhandler(404)
