@@ -1,77 +1,73 @@
 #!/usr/bin/env python3
 """
-User view for handling User-related endpoints
+Main Flask app for API
 """
-from flask import jsonify, abort, request
-from models.user import User
+from os import getenv
+from flask import Flask, jsonify, abort, request
+from flask_cors import CORS
 from api.v1.views import app_views
 
+app = Flask(__name__)
+app.register_blueprint(app_views)
+CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-@app_views.route('/users', methods=['GET'], strict_slashes=False)
-def list_users():
-    """GET /api/v1/users - List all users"""
-    users = User.all()
-    return jsonify([user.to_dict() for user in users])
+# Initialize authentication system
+auth = None
+auth_type = getenv("AUTH_TYPE")
+
+if auth_type == "basic_auth":
+    from api.v1.auth.basic_auth import BasicAuth
+    auth = BasicAuth()
+elif auth_type == "auth":
+    from api.v1.auth.auth import Auth
+    auth = Auth()
 
 
-@app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
-def get_user(user_id):
-    """GET /api/v1/users/<user_id> - Retrieve a user by ID or 'me'"""
-    if user_id == "me":
-        if not hasattr(request, "current_user") or request.current_user is None:
-            abort(404)
-        return jsonify(request.current_user.to_dict())
+@app.before_request
+def before_request():
+    """Handle authentication before processing each request"""
+    if auth is None:
+        return
 
-    user = User.get(user_id)
+    excluded_paths = [
+        '/api/v1/status/',
+        '/api/v1/unauthorized/',
+        '/api/v1/forbidden/'
+    ]
+
+    if not auth.require_auth(request.path, excluded_paths):
+        return
+
+    if auth.authorization_header(request) is None:
+        abort(401)
+
+    user = auth.current_user(request)
     if user is None:
-        abort(404)
-    return jsonify(user.to_dict())
+        abort(403)
+
+    request.current_user = user
 
 
-@app_views.route('/users', methods=['POST'], strict_slashes=False)
-def create_user():
-    """POST /api/v1/users - Create a new user"""
-    from api.v1.app import auth
-
-    if not request.get_json():
-        return jsonify({"error": "Not a JSON"}), 400
-
-    data = request.get_json()
-    if 'email' not in data:
-        return jsonify({"error": "Missing email"}), 400
-    if 'password' not in data:
-        return jsonify({"error": "Missing password"}), 400
-
-    user = User(**data)
-    user.save()
-    return jsonify(user.to_dict()), 201
+@app.errorhandler(404)
+def not_found(error) -> str:
+    """Handler for 404 errors"""
+    return jsonify({"error": "Not found"}), 404
 
 
-@app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
-def update_user(user_id):
-    """PUT /api/v1/users/<user_id> - Update user attributes"""
-    user = User.get(user_id)
-    if user is None:
-        abort(404)
-
-    if not request.get_json():
-        return jsonify({"error": "Not a JSON"}), 400
-
-    data = request.get_json()
-    ignore = ['id', 'email', 'created_at', 'updated_at']
-
-    for key, value in data.items():
-        if key not in ignore:
-            setattr(user, key, value)
-    user.save()
-    return jsonify(user.to_dict())
+@app.errorhandler(401)
+def unauthorized(error) -> str:
+    """Handler for 401 errors"""
+    return jsonify({"error": "Unauthorized"}), 401
 
 
-@app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
-def delete_user(user_id):
-    """DELETE /api/v1/users/<user_id> - Delete a user"""
-    user = User.get(user_id)
-    if user is None:
-        abort(404)
-    user.remove()
-    return jsonify({}), 200
+@app.errorhandler(403)
+def forbidden(error) -> str:
+    """Handler for 403 errors"""
+    return jsonify({"error": "Forbidden"}), 403
+
+
+if __name__ == "__main__":
+    host = getenv("API_HOST", "0.0.0.0")
+    port = getenv("API_PORT", "5000")
+    app.run(host=host, port=port)
+
