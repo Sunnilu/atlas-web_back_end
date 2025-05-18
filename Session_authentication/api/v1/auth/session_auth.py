@@ -18,7 +18,7 @@ class SessionAuth(Auth):
 
     def create_session(self, user_id: str = None) -> Optional[str]:
         """
-        Creates a session ID for a user_id and stores it in the session dictionary.
+        Creates a session ID for user_id and store in the session dictionary.
 
         Args:
             user_id (str): The ID of the user to associate with the session.
