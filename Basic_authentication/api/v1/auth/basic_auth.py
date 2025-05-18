@@ -12,13 +12,13 @@ class BasicAuth(Auth):
 
     def extract_base64_authorization_header(self, authorization_header: str) -> str:
         """
-        Extracts the Base64 part of the Authorization header for Basic Authentication.
+        Extracts the Base64 part of Authorization header for Basic Authentication.
 
         Args:
             authorization_header (str): The full Authorization header.
 
         Returns:
-            str or None: The Base64 encoded part of the header if valid, else None.
+            str or None: The Base64 encoded part of header if valid, else None.
         """
         if authorization_header is None:
             return None
@@ -33,7 +33,7 @@ class BasicAuth(Auth):
 
     def decode_base64_authorization_header(self, base64_authorization_header: str) -> str:
         """
-        Decodes the Base64 string base64_authorization_header to a UTF-8 string.
+        Decodes the Base64 string base64_authorization_header to UTF-8 string.
 
         Args:
             base64_authorization_header (str): The Base64 encoded string.
