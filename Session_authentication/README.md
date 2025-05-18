@@ -1,4 +1,5 @@
-✅ What is Session Authentication?
+What is Session Authentication?
+
 Session authentication is a method used to verify a user's identity across multiple requests after they've logged in, without requiring the user to re-enter their credentials on each request.
 
 🧩 How It Works — Step-by-Step
@@ -32,9 +33,8 @@ Session data (like who the user is) is stored on the server.
 Once the session expires or is deleted (e.g. logout), the session is no longer valid.
 
 🔐 Comparison with Basic Authentication
-Feature	Basic Authentication	Session Authentication
-Credentials sent?	On every request	Only on login
-Secure over HTTPS?	Yes	Yes
-Stores state?	No (stateless)	Yes (session-based)
-Use case	APIs, CLI tools	Websites, interactive UIs
-
+Feature Basic Authentication Session Authentication
+Credentials sent? On every request Only on login
+Secure over HTTPS? Yes Yes
+Stores state? No (stateless) Yes (session-based)
+Use case APIs, CLI tools Websites, interactive UIs
