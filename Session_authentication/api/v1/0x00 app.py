@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """
-Main Flask app for API
+Main Flask application file for the API.
+Handles setup, CORS, auth configuration, error handling,
+and pre-request authentication filtering.
 """
+
 from os import getenv
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
 from api.v1.views import app_views
 
+# Initialize Flask application
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-# Initialize authentication system
+# Authentication configuration
 auth = None
 auth_type = getenv("AUTH_TYPE")
 
@@ -25,7 +29,10 @@ elif auth_type == "auth":
 
 @app.before_request
 def before_request():
-    """Handle authentication before processing each request"""
+    """
+    Hook that runs before each request to handle authentication.
+    Sets request.current_user if authentication is successful.
+    """
     if auth is None:
         return
 
@@ -50,19 +57,25 @@ def before_request():
 
 @app.errorhandler(404)
 def not_found(error) -> str:
-    """Handler for 404 errors"""
+    """
+    Handles 404 Not Found errors.
+    """
     return jsonify({"error": "Not found"}), 404
 
 
 @app.errorhandler(401)
 def unauthorized(error) -> str:
-    """Handler for 401 errors"""
+    """
+    Handles 401 Unauthorized errors.
+    """
     return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.errorhandler(403)
 def forbidden(error) -> str:
-    """Handler for 403 errors"""
+    """
+    Handles 403 Forbidden errors.
+    """
     return jsonify({"error": "Forbidden"}), 403
 
 
@@ -70,4 +83,3 @@ if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
     app.run(host=host, port=port)
-
