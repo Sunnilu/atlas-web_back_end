@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-"""
-Main Flask application file for the API.
-Handles setup, CORS, auth configuration, error handling,
-and pre-request authentication filtering.
-"""
+"""Module for managing user-related endpoints."""
+
 
 from os import getenv
 from flask import Flask, jsonify, abort, request
