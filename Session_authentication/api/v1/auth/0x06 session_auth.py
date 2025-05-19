@@ -50,7 +50,7 @@ class SessionAuth(Auth):
 
     def current_user(self, request=None) -> Optional[User]:
         """
-        Retrieves the User instance for the session ID found in the request cookie.
+        Retrieves the User instance for session ID found in request cookie.
 
         Args:
             request (flask.Request): The request containing the cookie.
@@ -67,4 +67,3 @@ class SessionAuth(Auth):
             return None
 
         return User.get(user_id)
-
