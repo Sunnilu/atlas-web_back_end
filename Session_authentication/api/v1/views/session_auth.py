@@ -43,3 +43,18 @@ def session_login():
     response.set_cookie(session_name, session_id)
 
     return response
+
+    from flask import jsonify, abort
+
+def session_logout():
+    """
+    DELETE /api/v1/auth_session/logout
+    Logs the user out by destroying the session.
+    """
+    from api.v1.app import auth
+
+    destroyed = auth.destroy_session(request)
+    if not destroyed:
+        abort(404)
+
+    return jsonify({}), 200
