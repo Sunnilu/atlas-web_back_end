@@ -7,15 +7,9 @@ Handles login via session mechanism.
 from flask import request, jsonify, make_response
 from models.user import User
 import os
+from api.v1.views import app_views  # ✅ Safe to import — used *after* all view logic
 
 
-def get_app_views():
-    """Avoid circular import by importing app_views only when needed."""
-    from api.v1.views import app_views
-    return app_views
-
-
-@get_app_views().route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def session_login():
     """
     POST /api/v1/auth_session/login
@@ -43,8 +37,7 @@ def session_login():
     if not user.is_valid_password(password):
         return jsonify({"error": "wrong password"}), 401
 
-    from api.v1.app import auth  # import here to avoid circular import
-
+    from api.v1.app import auth  # ✅ Only imported when needed
     session_id = auth.create_session(user.id)
     if session_id is None:
         return jsonify({"error": "session creation failed"}), 500
@@ -54,3 +47,12 @@ def session_login():
     response.set_cookie(session_name, session_id)
 
     return response
+
+
+# ✅ Register the route AFTER everything is defined
+app_views.add_url_rule(
+    '/auth_session/login',
+    view_func=session_login,
+    methods=['POST'],
+    strict_slashes=False
+)
