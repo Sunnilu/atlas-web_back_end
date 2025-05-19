@@ -41,3 +41,17 @@ If you have the debugger disabled or trust the users on your network, you can ma
 
 $ flask run --host=0.0.0.0
 This tells your operating system to listen on all public IPs.
+
+Command Line Interface
+Installing Flask installs the flask script, a Click command line interface, in your virtualenv. Executed from the terminal, this script gives access to built-in, extension, and application-defined commands. The --help option will give more information about any commands and options.
+
+Application Discovery
+The flask command is installed by Flask, not your application; it must be told where to find your application in order to use it. The --app option is used to specify how to load the application.
+
+While --app supports a variety of options for specifying your application, most use cases should be simple. Here are the typical values:
+
+(nothing)
+The name “app” or “wsgi” is imported (as a “.py” file, or package), automatically detecting an app (app or application) or factory (create_app or make_app).
+
+--app hello
+The given name is imported, automatically detecting an app (app or application) or factory (create_app or make_app).
