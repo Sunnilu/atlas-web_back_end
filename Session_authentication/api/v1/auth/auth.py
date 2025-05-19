@@ -5,6 +5,7 @@ Auth module for handling authentication templates.
 
 from typing import List, TypeVar
 from flask import request
+from os import getenv
 
 
 class Auth:
@@ -63,3 +64,22 @@ class Auth:
             User or None: Currently authenticated user, or None.
         """
         return None
+
+    def session_cookie(self, request=None) -> str:
+        """
+        Returns the session ID from the request cookies using SESSION_NAME.
+
+        Args:
+            request (flask.Request): The Flask request object.
+
+        Returns:
+            str or None: The session ID if present, else None.
+        """
+        if request is None:
+            return None
+
+        session_name = getenv('SESSION_NAME')
+        if session_name is None:
+            return None
+
+        return request.cookies.get(session_name)
