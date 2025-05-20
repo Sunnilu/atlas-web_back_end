@@ -12,7 +12,7 @@ Base = declarative_base()
 
 class User(Base):
     """
-    SQLAlchemy model for users table.
+    SQLAlchemy model for the users table.
     """
     __tablename__ = 'users'
 
