@@ -57,4 +57,3 @@ class DB:
             raise NoResultFound("No user found matching the criteria")
         except InvalidRequestError:
             raise InvalidRequestError("Invalid query arguments")
-        return user
