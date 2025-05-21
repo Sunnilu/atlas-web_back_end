@@ -3,7 +3,10 @@
 Module that logs filtered user data from a MySQL database.
 """
 import re
+import os
+import logging
 import mysql.connector
+from typing import List
 
 
 def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
